@@ -6,26 +6,27 @@ using System.Threading.Tasks;
 
 namespace Assets._State
 {
-    public class DeathState : BasePlayerState
+    public class WinState : BasePlayerState
     {
         public override void OnStageEnter(PlayerStateManager stateManager)
         {
-            throw new NotImplementedException();
+            stateManager.DisableAllAnimations();
+            stateManager.animator.SetBool(AnimationStrings.isWin, true);
         }
 
         public override void OnStageExit(PlayerStateManager stateManager)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void OnStageFixedUpdate(PlayerStateManager stateManager)
         {
-            throw new NotImplementedException();
+
         }
 
         public override void OnStageUpdate(PlayerStateManager stateManager)
         {
-            throw new NotImplementedException();
+
         }
     }
 }
