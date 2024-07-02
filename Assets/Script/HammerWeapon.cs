@@ -15,11 +15,12 @@ public class HammerWeapon : Weapon
         originPosition = this.transform.localPosition;
         originRotation = this.transform.localRotation;
         originScale = this.transform.localScale;
-
+        projectileSpeed = 6f;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+        Debug.Log("IsThrowing " + isThrowing);
         if (isThrowing)
         {
             this.ThrowWeapon(stateManager, enemyPos);
@@ -27,14 +28,24 @@ public class HammerWeapon : Weapon
     }
     public override void ThrowWeapon(PlayerStateManager stateManager, Vector3 enemyPos)
     {
-        stateManager.currentWeapon.transform.parent = stateManager.projectileContainer;
+        this.transform.parent = stateManager.projectileContainer;
         Vector3 destination = new Vector3(enemyPos.x, transform.position.y, enemyPos.z);
-        stateManager.currentWeapon.transform.position = Vector3.MoveTowards(stateManager.currentWeapon.transform.position, destination, stateManager.projectileSpeed);
+        this.transform.position = Vector3.MoveTowards(this.transform.position, destination, projectileSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(stateManager.playerTransform.position, transform.position) > stateManager.playerAttack.Radius + 2f)
+        if (Vector3.Distance(stateManager.playerTransform.position, transform.position) > stateManager.playerAttack.Radius + 0.5f)
         {
             isThrowing = false;
             this.ResetTransform();
+            Debug.Log("IsThrowing " + isThrowing);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            Debug.Log("Collide with enemy");
+            isThrowing = false;
+            ResetTransform();
         }
     }
 
@@ -47,12 +58,4 @@ public class HammerWeapon : Weapon
         this.transform.localScale = originScale;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Enemy"))
-        {
-            isThrowing = false;
-            ResetTransform();
-        }
-    }
 }

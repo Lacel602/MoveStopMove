@@ -43,11 +43,7 @@ public class PlayerStateManager : MonoBehaviour
 
     public GameObject[] weapons;
 
-    public GameObject currentWeapon;
-
     public Weapon currentWeaponScript;
-
-    public float projectileSpeed = 8f;
 
     public Transform projectileContainer;
 
@@ -93,8 +89,7 @@ public class PlayerStateManager : MonoBehaviour
 
                 if (weapons[i].activeSelf)
                 {
-                    currentWeapon = weapons[i];
-                    currentWeaponScript = currentWeapon.GetComponent<Weapon>();
+                    currentWeaponScript = weapons[i].GetComponent<Weapon>();
                 }
             }
         }

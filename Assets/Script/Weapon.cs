@@ -9,6 +9,7 @@ namespace Assets.Script
 {
     public abstract class Weapon: MonoBehaviour
     {
+        public float projectileSpeed;
         public Transform originParent;
 
         public Vector3 originPosition;

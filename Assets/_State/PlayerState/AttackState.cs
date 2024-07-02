@@ -13,6 +13,7 @@ namespace Assets._State
     {
         private float attackAnimationDelayCrr = 0f;
 
+        private bool isAtackked = false;
 
         private float attackDelayCrr = 0f;
         private Vector3 enemyPos = Vector3.zero;
@@ -68,7 +69,9 @@ namespace Assets._State
                 //Check value of square Vector3 of joystick
                 if (moveDirection.sqrMagnitude > 0f)
                 {
+                    attackDelayCrr = 0;
                     attackAnimationDelayCrr = 0;
+                    isAtackked = false;
                     stateManager.SwitchState(stateManager.moveState);
                     return;
                 }
@@ -82,10 +85,11 @@ namespace Assets._State
                 }
                 else
                 {
-                    if (enemyPos != Vector3.zero)
+                    if (enemyPos != Vector3.zero && !isAtackked)
                     {
                         stateManager.currentWeaponScript.isThrowing = true;
                         stateManager.currentWeaponScript.enemyPos = this.enemyPos;
+                        isAtackked = true;
                     }
                 }
 
@@ -93,6 +97,7 @@ namespace Assets._State
                 {
                     attackDelayCrr = 0;
                     attackAnimationDelayCrr = 0;
+                    isAtackked = false;
                     stateManager.SwitchState(stateManager.idleState);
                     return;
                 }
@@ -101,19 +106,6 @@ namespace Assets._State
                     attackAnimationDelayCrr += Time.deltaTime;
                 }
             }
-        }
-
-        private void ThrowWeapons(PlayerStateManager stateManager, Vector3 enemyPos)
-        {
-            //stateManager.currentWeapon.transform.parent = stateManager.projectileContainer;
-            //Vector3 targetDirection = new Vector3(enemyPos.x, stateManager.currentWeapon.transform.position.y, enemyPos.z);
-            //stateManager.currentWeapon.transform.position = Vector3.MoveTowards(stateManager.currentWeapon.transform.position, enemyPos, stateManager.projectileSpeed);
-
-            //if (Vector3.Distance(stateManager.currentWeapon.transform.position, targetDirection) < 0.1f)
-            //{
-            //    stateManager.currentWeapon.transform.parent = originParent;
-            //    stateManager.currentWeapon.transform.position = originTransform.position;
-            //}
         }
     }
 }
