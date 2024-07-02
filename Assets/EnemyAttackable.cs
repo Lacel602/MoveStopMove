@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyAttackable: Attackable
 {
-
     protected override void TransformTargetCircle()
     {
         

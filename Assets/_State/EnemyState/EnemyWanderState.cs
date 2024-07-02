@@ -5,10 +5,21 @@ public class EnemyWanderState : BaseEnemyState
 {
     private float wanderTimeMax;
     private float wanderTime = 0;
+
+    public float duration = 1f; // Duration of the rotation in seconds
+    public float rotationRange = 120f; // Range of rotation in degrees
+
+    private Quaternion initialRotation;
+    private Quaternion targetRotation;
+    private float elapsedTime;
+    private bool isRotating = false;
+
+
     public override void OnStageEnter(EnemyStateManager stateManager)
     {
         stateManager.DisableAllAnimations();
 
+        //Set max wanderTime
         wanderTimeMax = UnityEngine.Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
     }
 
@@ -39,10 +50,14 @@ public class EnemyWanderState : BaseEnemyState
         }
 
         //Enemy movement here
-        
+
         //Randomfacing
+        RotateOverTime(stateManager.currentEnemy);
 
         //Run infinite until time over (check for wall)
+        stateManager.currentEnemy.transform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
+
+        //Use physic to check for wall 
 
         //Return to idle when time over
         if (wanderTime < wanderTimeMax)
@@ -57,8 +72,34 @@ public class EnemyWanderState : BaseEnemyState
         }
     }
 
+    private void RotateOverTime(Transform currentEnemy)
+    {
+        if (!isRotating)
+        {
+            isRotating = true;
+            elapsedTime = 0f;
+        }
+
+        if (elapsedTime < duration)
+        {
+            currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+        }
+        else
+        {
+            // Ensure the object reaches the exact target rotation at the end
+            currentEnemy.rotation = targetRotation;
+
+            // Reset for potential future rotations
+            isRotating = false; 
+        }
+    }
+
     private void ResetVariable()
     {
         wanderTime = 0;
+        isRotating = false;
     }
+
+    
 }

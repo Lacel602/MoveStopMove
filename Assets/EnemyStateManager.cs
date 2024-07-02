@@ -32,6 +32,9 @@ public class EnemyStateManager : MonoBehaviour
 
     public Vector2 wanderTime = new Vector2(2f, 4f);
 
+    [SerializeField]
+    public float moveSpeed = 2f;
+
     public bool isAlive = true;
 
     public bool hasAttacked = false;
