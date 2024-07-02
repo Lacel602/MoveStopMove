@@ -287,9 +287,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 181134037}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57e2ba913ace354da0f8827d42681f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 94afcb48e7edc1d4d975a088655348fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileSpeed: 0
+  projectileRange: 0
+  projectileContainer: {fileID: 0}
+  originParent: {fileID: 0}
+  startWeaponWorldPos: {x: 0, y: 0, z: 0}
+  originPosition: {x: 0, y: 0, z: 0}
+  originScale: {x: 0, y: 0, z: 0}
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
+  getStartPos: 0
+  isThrowing: 0
+  enemyPos: {x: 0, y: 0, z: 0}
 --- !u!1 &219369544
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,8 +569,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282026920}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.7160523, y: 0.0029990673, z: -15.309999}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -575,15 +586,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 282026920}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8ae0420c8781364a908b89b9484abd2, type: 3}
+  m_Script: {fileID: 11500000, guid: 24edef9cbe6691747abc22f43b7d3e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateManager: {fileID: 621705380}
   groundCircle: {fileID: 946444789}
   radius: 5
   enemy: {fileID: 0}
   hasEnemy: 0
   targetCircle: {fileID: 1272631021}
+  currentHumanoid: {fileID: 1710082207}
 --- !u!1 &621705378
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,12 +704,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ae0420c8781364a908b89b9484abd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateManager: {fileID: 621705380}
   groundCircle: {fileID: 1885130171}
   radius: 5
   enemy: {fileID: 0}
   hasEnemy: 0
   targetCircle: {fileID: 1272631021}
+  currentHumanoid: {fileID: 0}
 --- !u!1 &654555381
 GameObject:
   m_ObjectHideFlags: 0
@@ -1379,15 +1390,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94afcb48e7edc1d4d975a088655348fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectileSpeed: 0
+  projectileRange: 0
   projectileContainer: {fileID: 0}
-  projectileSpeed: 6
-  originParent: {fileID: 1729524199}
-  originPosition: {x: -0.06274996, y: 0.10207379, z: 0.03015023}
-  originScale: {x: 39.00003, y: 39.00001, z: 39}
-  originRotation: {x: 0.34258738, y: 0.037644807, z: -0.8085913, w: 0.47686148}
+  originParent: {fileID: 0}
+  startWeaponWorldPos: {x: 0, y: 0, z: 0}
+  originPosition: {x: 0, y: 0, z: 0}
+  originScale: {x: 0, y: 0, z: 0}
+  originRotation: {x: 0, y: 0, z: 0, w: 0}
+  getStartPos: 0
   isThrowing: 0
   enemyPos: {x: 0, y: 0, z: 0}
-  stateManager: {fileID: 0}
 --- !u!1 &1162285280
 GameObject:
   m_ObjectHideFlags: 0
@@ -1436,9 +1449,10 @@ MonoBehaviour:
   attackable: {fileID: 282026922}
   animator: {fileID: 1558439262}
   attackDelayMax: 1.1
-  currentWeaponScript: {fileID: 0}
+  currentWeaponScript: {fileID: 181134038}
   projectileContainer: {fileID: 109625532}
-  idleTime: {x: 0, y: 1}
+  idleTime: {x: 1, y: 2}
+  wanderTime: {x: 2, y: 4}
   isAlive: 1
   hasAttacked: 0
 --- !u!1 &1180409644
@@ -3259,15 +3273,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1710082207}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.96, y: -2.24, z: 10.93}
+  m_LocalRotation: {x: 0, y: -0.41413727, z: 0, w: 0.9102144}
+  m_LocalPosition: {x: -1.96, y: -2.246, z: 10.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1558439258}
   - {fileID: 1162285281}
   m_Father: {fileID: 654555382}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -48.93, z: 0}
 --- !u!136 &1710082209
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3738,7 +3752,7 @@ GameObject:
   - component: {fileID: 2075054255}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3833,15 +3847,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94afcb48e7edc1d4d975a088655348fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileContainer: {fileID: 0}
   projectileSpeed: 6
+  projectileRange: 5
+  projectileContainer: {fileID: 109625532}
   originParent: {fileID: 1729524199}
+  startWeaponWorldPos: {x: 0, y: 0, z: 0}
   originPosition: {x: -0.06274996, y: 0.10207379, z: 0.03015023}
   originScale: {x: 39.00003, y: 39.00001, z: 39}
   originRotation: {x: 0.34258738, y: 0.037644878, z: -0.8085913, w: 0.47686154}
+  getStartPos: 0
   isThrowing: 0
   enemyPos: {x: 0, y: 0, z: 0}
-  stateManager: {fileID: 621705380}
 --- !u!65 &2081529422
 BoxCollider:
   m_ObjectHideFlags: 0

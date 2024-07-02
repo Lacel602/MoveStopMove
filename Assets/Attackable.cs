@@ -7,9 +7,6 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Attackable : MonoBehaviour
 {
     [SerializeField]
-    private PlayerStateManager stateManager;
-
-    [SerializeField]
     private GameObject groundCircle;
 
     [SerializeField]
@@ -30,25 +27,32 @@ public class Attackable : MonoBehaviour
     [SerializeField]
     private GameObject targetCircle;
 
+    [SerializeField]
+    protected GameObject currentHumanoid;
+
     private void Reset()
     {
         this.LoadComponent();
     }
 
-    private void LoadComponent()
+    protected virtual void LoadComponent()
     {
-        stateManager = this.transform.parent.GetComponent<PlayerStateManager>();
         groundCircle = GameObject.Find("GroundCircle").gameObject;
         targetCircle = GameObject.Find("TargetCircle").gameObject;
+        currentHumanoid = this.transform.parent.parent.gameObject;
     }
 
     private void FixedUpdate()
     {
         enemy = FindEnemies(this.transform.position, radius);
 
+        TransformTargetCircle();    
+    }
+
+    protected virtual void TransformTargetCircle()
+    {
         if (hasEnemy)
         {
-            targetCircle.SetActive(true);
             float mutiply = 1f;
             if (enemy.transform.localScale.x > enemy.transform.localScale.y)
             {
@@ -58,6 +62,8 @@ public class Attackable : MonoBehaviour
             {
                 mutiply = enemy.transform.localScale.y;
             }
+
+            targetCircle.SetActive(true);
             targetCircle.transform.localScale = new Vector3(mutiply, mutiply, targetCircle.transform.localScale.z);
             targetCircle.transform.position = new Vector3(enemy.transform.position.x, targetCircle.transform.position.y, enemy.transform.position.z);
         }
@@ -72,7 +78,7 @@ public class Attackable : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag("Enemy"))
+            if (CheckValidObject(hitCollider))
             {
                 hasEnemy = true;
                 if (oldEnemy == null)
@@ -92,7 +98,7 @@ public class Attackable : MonoBehaviour
 
         foreach (var hitCollider in hitColliders)
         {
-            if (hitCollider.CompareTag("Enemy"))
+            if (CheckValidObject(hitCollider))
             {
                 return hitCollider.gameObject;
             }        
@@ -101,6 +107,16 @@ public class Attackable : MonoBehaviour
         hasEnemy = false;
         oldEnemy = null;
         return null;
+    }
+
+    protected virtual bool CheckValidObject(Collider hitCollider)
+    {
+        if (hitCollider.CompareTag("Enemy"))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void OnDrawGizmos()

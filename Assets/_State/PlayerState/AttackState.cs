@@ -16,6 +16,7 @@ namespace Assets._State
         private bool isAttackked = false;
 
         private float attackDelayTime = 0f;
+
         private Vector3 enemyPos = Vector3.zero;
         public override void OnStageEnter(PlayerStateManager stateManager)
         {
@@ -23,7 +24,6 @@ namespace Assets._State
             stateManager.DisableAllAnimations();
             if (!stateManager.hasAttacked)
             {
-                Debug.Log("Attackk!");
                 //Enable attack
                 stateManager.animator.SetBool(AnimationStrings.isAttack, true);
 
@@ -51,6 +51,20 @@ namespace Assets._State
 
         public override void OnStageUpdate(PlayerStateManager stateManager)
         {
+            if (!stateManager.isAlive)
+            {
+                this.ResetVariable();
+                stateManager.SwitchState(stateManager.deathState);
+                return;
+            }
+
+            if (stateManager.isWin)
+            {
+                this.ResetVariable();
+                stateManager.SwitchState(stateManager.winState);
+                return;
+            }
+
             //Change player rotation to look at enemy
             if (stateManager.attackable.HasEnemy)
             {
@@ -60,6 +74,7 @@ namespace Assets._State
                 stateManager.playerTransform.LookAt(direction);
             }
 
+            //Check move state
             if (stateManager.isJoystickEnable)
             {
                 Vector3 moveDirection = new Vector3(stateManager.variableJoystick.Direction.x, 0f, stateManager.variableJoystick.Direction.y);
@@ -67,8 +82,7 @@ namespace Assets._State
                 //Check value square Vector3 of joystick
                 if (moveDirection.sqrMagnitude > 0f)
                 {
-                    //Reset all time count variable
-                    ResetTimeCount();                
+                    this.ResetVariable();                
                     stateManager.SwitchState(stateManager.moveState);
                     return;
                 }
@@ -76,7 +90,7 @@ namespace Assets._State
 
             if (stateManager.hasAttacked)
             {
-                //Check if attack animation has played for a amount of time
+                //Check if attack animation has played for a amount of time before throw weapon
                 if (attackDelayTime < stateManager.attackDelayMax / 4)
                 {
                     attackDelayTime += Time.deltaTime;
@@ -94,7 +108,7 @@ namespace Assets._State
                 //Ensure attack animation done before return to idle state
                 if (attackAnimationDelayTime >= stateManager.attackDelayMax)
                 {
-                    ResetTimeCount();
+                    ResetVariable();
                     stateManager.SwitchState(stateManager.idleState);
                     return;
                 }
@@ -105,7 +119,7 @@ namespace Assets._State
             }
         }
 
-        private void ResetTimeCount()
+        private void ResetVariable()
         {
             attackDelayTime = 0;
             attackAnimationDelayTime = 0;

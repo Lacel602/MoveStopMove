@@ -37,7 +37,7 @@ public class PlayerStateManager : MonoBehaviour
     internal Transform playerTransform;
 
     [SerializeField]
-    internal float attackDelayMax = 1.1f;
+    internal float attackDelayMax = 0.8f;
 
     private GameObject weaponList;
 

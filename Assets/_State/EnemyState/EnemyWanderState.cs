@@ -8,6 +8,8 @@ public class EnemyWanderState : BaseEnemyState
     public override void OnStageEnter(EnemyStateManager stateManager)
     {
         stateManager.DisableAllAnimations();
+
+        wanderTimeMax = UnityEngine.Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
@@ -40,8 +42,9 @@ public class EnemyWanderState : BaseEnemyState
         
         //Randomfacing
 
-        //Run infinite until time over
+        //Run infinite until time over (check for wall)
 
+        //Return to idle when time over
         if (wanderTime < wanderTimeMax)
         {
             wanderTime += Time.deltaTime;
@@ -49,7 +52,7 @@ public class EnemyWanderState : BaseEnemyState
         else
         {
             this.ResetVariable();
-            stateManager.SwitchState(stateManager.wanderState);
+            stateManager.SwitchState(stateManager.idleState);
             return;
         }
     }

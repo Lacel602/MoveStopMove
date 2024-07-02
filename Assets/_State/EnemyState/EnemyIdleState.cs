@@ -20,6 +20,13 @@ public class EnemyIdleState : BaseEnemyState
 
     public override void OnStageUpdate(EnemyStateManager stateManager)
     {
+        if (!stateManager.isAlive)
+        {
+            this.ResetVariable();
+            stateManager.SwitchState(stateManager.deathState);
+            return;
+        }
+
         if (stateManager.attackable.HasEnemy)
         {
             if (!stateManager.hasAttacked)
@@ -28,13 +35,6 @@ public class EnemyIdleState : BaseEnemyState
                 stateManager.SwitchState(stateManager.attackState);
                 return;
             }
-        }
-
-        if (!stateManager.isAlive)
-        {
-            this.ResetVariable();
-            stateManager.SwitchState(stateManager.deathState);
-            return;
         }
 
         if (idleTime < idleTimeMax)

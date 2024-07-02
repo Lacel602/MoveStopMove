@@ -9,32 +9,54 @@ namespace Assets.Script
 {
     public abstract class Weapon : MonoBehaviour
     {
-        public Transform projectileContainer;
+        [Header("WeaponStats")]
+        [SerializeField]
+        protected float projectileSpeed;
 
-        public float projectileSpeed;
+        [SerializeField]
+        protected float projectileMaxFlyTime;
 
-        public float projectileRange;
+        protected float currentFlyingTime = 0f;
 
-        public Transform originParent;
+        [Header("Component")]
+        [SerializeField]
+        protected Transform projectileContainer;
 
-        public Vector3 originPosition;
+        [Header("OriginTransform")]
+        [SerializeField]
+        protected Transform originParent;
+        [SerializeField]
+        protected Vector3 startWeaponWorldPos;
+        [SerializeField]
+        protected Vector3 originPosition;
+        [SerializeField]
+        protected Vector3 originScale;
+        [SerializeField]
+        protected Quaternion originRotation;
 
-        public Vector3 originScale;
-
-        public Quaternion originRotation;
-
+        [Header("LogicVariable")]
+        [SerializeField]
+        protected bool getStartPos = false;
+        [SerializeField]
         public bool isThrowing;
-
+        [SerializeField]
         public Vector3 enemyPos;
 
         public abstract void ThrowWeapon(Vector3 enemyPos);
 
-        public virtual void ResetTransform()
+        protected virtual void ResetTransform()
         {
             this.transform.parent = originParent;
             this.transform.localPosition = originPosition;
             this.transform.localRotation = originRotation;
             this.transform.localScale = originScale;
+        }
+
+        protected virtual void ResetVariable()
+        {
+            isThrowing = false;
+            getStartPos = !getStartPos;
+            currentFlyingTime = 0f;
         }
     }
 }
