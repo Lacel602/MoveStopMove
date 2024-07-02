@@ -26,6 +26,12 @@ namespace Assets._State
 
         public override void OnStageUpdate(PlayerStateManager stateManager)
         {
+            //Reset player attack
+            if (stateManager.hasAttacked)
+            {
+                stateManager.hasAttacked = ! stateManager.hasAttacked;
+            }
+
             if (!stateManager.isAlive)
             {
                 stateManager.SwitchState(stateManager.deathState);
@@ -43,7 +49,7 @@ namespace Assets._State
                 Vector3 moveDirection = new Vector3(stateManager.variableJoystick.Direction.x, 0f, stateManager.variableJoystick.Direction.y);
 
                 //Check value of square Vector3 of joystick
-                if (moveDirection.sqrMagnitude <= 0f && !stateManager.isAttack)
+                if (moveDirection.sqrMagnitude <= 0f && !stateManager.hasAttacked)
                 {
                     stateManager.SwitchState(stateManager.idleState);
                     return;

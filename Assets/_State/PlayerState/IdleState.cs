@@ -15,16 +15,18 @@ public class IdleState : BasePlayerState
 
     public override void OnStageUpdate(PlayerStateManager stateManager)
     {
+        if (stateManager.playerAttack.HasEnemy)
+        {
+            if (!stateManager.hasAttacked)
+            {
+                stateManager.SwitchState(stateManager.attackState);
+                return;
+            }
+        }
         //Check player alive
         if (!stateManager.isAlive)
         {
             stateManager.SwitchState(stateManager.deathState);
-            return;
-        }
-
-        if (stateManager.isAttack)
-        {
-            stateManager.SwitchState(stateManager.attackState);
             return;
         }
 

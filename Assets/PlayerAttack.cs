@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -13,12 +14,21 @@ public class PlayerAttack : MonoBehaviour
 
     [SerializeField]
     private float radius = 5f;
+    public float Radius => radius;
 
     [SerializeField]
     private GameObject enemy;
+    public GameObject Enemy => enemy;
+
+    private GameObject oldEnemy;
 
     [SerializeField]
-    public bool hasEnemy = false;
+    private bool hasEnemy = false;
+
+    public bool HasEnemy => hasEnemy;
+
+    [SerializeField]
+    private GameObject targetCircle;
 
     private void Reset()
     {
@@ -29,17 +39,32 @@ public class PlayerAttack : MonoBehaviour
     {
         stateManager = this.transform.parent.GetComponent<PlayerStateManager>();
         groundCircle = GameObject.Find("GroundCircle").gameObject;
+        targetCircle = GameObject.Find("TargetCircle").gameObject;
     }
 
     private void FixedUpdate()
     {
         enemy = FindEnemies(this.transform.position, radius);
 
-        if (hasEnemy )
+        if (hasEnemy)
         {
-            Debug.Log("enemy: " + enemy.name);
+            targetCircle.SetActive(true);
+            float mutiply = 1f;
+            if (enemy.transform.localScale.x > enemy.transform.localScale.y)
+            {
+                mutiply = enemy.transform.localScale.x;
+            }
+            else
+            {
+                mutiply = enemy.transform.localScale.y;
+            }
+            targetCircle.transform.localScale = new Vector3(mutiply, mutiply, targetCircle.transform.localScale.z);
+            targetCircle.transform.position = new Vector3(enemy.transform.position.x, targetCircle.transform.position.y, enemy.transform.position.z);
         }
-
+        else
+        {
+            targetCircle.SetActive(false);
+        }
     }
 
     private GameObject FindEnemies(Vector3 center, float radius)
@@ -50,11 +75,31 @@ public class PlayerAttack : MonoBehaviour
             if (hitCollider.CompareTag("Enemy"))
             {
                 hasEnemy = true;
-                return hitCollider.gameObject;
+                if (oldEnemy == null)
+                {
+                    oldEnemy = hitCollider.gameObject;
+                    return hitCollider.gameObject;
+                }
+                else
+                {
+                    if (hitCollider.gameObject == oldEnemy)
+                    {
+                        return oldEnemy;
+                    }
+                }
             }
         }
 
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Enemy"))
+            {
+                return hitCollider.gameObject;
+            }        
+        }
+
         hasEnemy = false;
+        oldEnemy = null;
         return null;
     }
 
