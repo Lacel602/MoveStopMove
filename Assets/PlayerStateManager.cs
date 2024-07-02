@@ -11,7 +11,7 @@ public class PlayerStateManager : MonoBehaviour
 {
     [Header("Component")]
     [SerializeField]
-    internal PlayerAttack playerAttack;
+    internal Attackable attackable;
 
     [SerializeField]
     internal VariableJoystick variableJoystick;
@@ -52,20 +52,20 @@ public class PlayerStateManager : MonoBehaviour
 
     public bool isAlive = true;
 
-    public bool isWin = false;
-
     public bool hasAttacked = false;
+
+    public bool isWin = false;
 
     public bool isDance = false;
 
     #region StateMachine
-    public BasePlayerState currentState;
+    public BaseState currentState;
     public IdleState idleState = new IdleState();
     public MoveState moveState = new MoveState();
     public DeathState deathState = new DeathState();
     public DanceState danceState = new DanceState();
     public AttackState attackState = new AttackState();
-    public WinState winStage = new WinState();
+    public WinState winState = new WinState();
     public UltiState ultiStage = new UltiState();
     #endregion
 
@@ -94,19 +94,37 @@ public class PlayerStateManager : MonoBehaviour
             }
         }
     }
-    
+
     private void LoadComponent()
     {
         inputCanvas = GameObject.Find("InputCanvas").GetComponent<Canvas>();
         variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         characterController = this.transform.parent.GetComponent<CharacterController>();
         animator = this.transform.parent.Find("Character_Optimieze2").GetComponent<Animator>();
-        playerAttack = this.transform.Find("AttackRange").GetComponent<PlayerAttack>();
-        playerTransform = GameObject.Find("Player").transform;
-        weaponList = GameObject.Find("PlayerWeapons");
-        projectileContainer = GameObject.Find("ProjectileContainer").transform;
+        attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
+        playerTransform = this.transform.parent;
+        weaponList = FindChildByName(this.transform.parent,"PlayerWeapons").gameObject;
+        
     }
 
+    private Transform FindChildByName(Transform parent, string name)
+    {
+        foreach (Transform child in parent)
+        {
+            if (child.name == name)
+            {
+                return child;
+            }
+
+            Transform result = FindChildByName(child, name);
+            if (result != null)
+            {
+                return result;
+            }
+        }
+
+        return null;
+    }
     #endregion
 
     private void Start()
@@ -124,7 +142,7 @@ public class PlayerStateManager : MonoBehaviour
         currentState.OnStageUpdate(this);
     }
 
-    public void SwitchState(BasePlayerState newState)
+    public void SwitchState(BaseState newState)
     {
         currentState.OnStageExit(this);
         currentState = newState;

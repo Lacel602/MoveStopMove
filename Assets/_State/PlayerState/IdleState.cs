@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class IdleState : BasePlayerState
+public class IdleState : BaseState
 {
     public override void OnStageEnter(PlayerStateManager stateManager)
     {
@@ -15,7 +15,7 @@ public class IdleState : BasePlayerState
 
     public override void OnStageUpdate(PlayerStateManager stateManager)
     {
-        if (stateManager.playerAttack.HasEnemy)
+        if (stateManager.attackable.HasEnemy)
         {
             if (!stateManager.hasAttacked)
             {
@@ -32,7 +32,7 @@ public class IdleState : BasePlayerState
 
         if (stateManager.isWin)
         {
-            stateManager.SwitchState(stateManager.winStage);
+            stateManager.SwitchState(stateManager.winState);
             return;
         }
 

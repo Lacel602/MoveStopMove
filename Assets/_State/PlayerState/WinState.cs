@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets._State
 {
-    public class WinState : BasePlayerState
+    public class WinState : BaseState
     {
         public override void OnStageEnter(PlayerStateManager stateManager)
         {

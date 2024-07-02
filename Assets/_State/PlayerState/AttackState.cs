@@ -9,13 +9,13 @@ using UnityEngine;
 
 namespace Assets._State
 {
-    public class AttackState : BasePlayerState
+    public class AttackState : BaseState
     {
-        private float attackAnimationDelayCrr = 0f;
+        private float attackAnimationDelayTime = 0f;
 
-        private bool isAtackked = false;
+        private bool isAttackked = false;
 
-        private float attackDelayCrr = 0f;
+        private float attackDelayTime = 0f;
         private Vector3 enemyPos = Vector3.zero;
         public override void OnStageEnter(PlayerStateManager stateManager)
         {
@@ -35,29 +35,27 @@ namespace Assets._State
             
 
             //Get current enemy position
-            if (stateManager.playerAttack.Enemy != null)
+            if (stateManager.attackable.Enemy != null)
             {
-                enemyPos = stateManager.playerAttack.Enemy.transform.position;
+                enemyPos = stateManager.attackable.Enemy.transform.position;
             }
         }
 
         public override void OnStageExit(PlayerStateManager stateManager)
         {
-
         }
 
         public override void OnStageFixedUpdate(PlayerStateManager stateManager)
         {
-
         }
 
         public override void OnStageUpdate(PlayerStateManager stateManager)
         {
             //Change player rotation to look at enemy
-            if (stateManager.playerAttack.HasEnemy)
+            if (stateManager.attackable.HasEnemy)
             {
                 Transform player = stateManager.transform;
-                Transform enemy = stateManager.playerAttack.Enemy.transform;
+                Transform enemy = stateManager.attackable.Enemy.transform;
                 Vector3 direction = new Vector3(enemy.position.x, player.position.y, enemy.position.z);
                 stateManager.playerTransform.LookAt(direction);
             }
@@ -66,12 +64,11 @@ namespace Assets._State
             {
                 Vector3 moveDirection = new Vector3(stateManager.variableJoystick.Direction.x, 0f, stateManager.variableJoystick.Direction.y);
 
-                //Check value of square Vector3 of joystick
+                //Check value square Vector3 of joystick
                 if (moveDirection.sqrMagnitude > 0f)
                 {
-                    attackDelayCrr = 0;
-                    attackAnimationDelayCrr = 0;
-                    isAtackked = false;
+                    //Reset all time count variable
+                    ResetTimeCount();                
                     stateManager.SwitchState(stateManager.moveState);
                     return;
                 }
@@ -79,33 +76,40 @@ namespace Assets._State
 
             if (stateManager.hasAttacked)
             {
-                if (attackDelayCrr < stateManager.attackDelayMax / 3)
+                //Check if attack animation has played for a amount of time
+                if (attackDelayTime < stateManager.attackDelayMax / 4)
                 {
-                    attackDelayCrr += Time.deltaTime;
+                    attackDelayTime += Time.deltaTime;
                 }
                 else
                 {
-                    if (enemyPos != Vector3.zero && !isAtackked)
+                    if (enemyPos != Vector3.zero && !isAttackked)
                     {
                         stateManager.currentWeaponScript.isThrowing = true;
                         stateManager.currentWeaponScript.enemyPos = this.enemyPos;
-                        isAtackked = true;
+                        isAttackked = true;
                     }
                 }
 
-                if (attackAnimationDelayCrr >= stateManager.attackDelayMax)
+                //Ensure attack animation done before return to idle state
+                if (attackAnimationDelayTime >= stateManager.attackDelayMax)
                 {
-                    attackDelayCrr = 0;
-                    attackAnimationDelayCrr = 0;
-                    isAtackked = false;
+                    ResetTimeCount();
                     stateManager.SwitchState(stateManager.idleState);
                     return;
                 }
                 else
                 {
-                    attackAnimationDelayCrr += Time.deltaTime;
+                    attackAnimationDelayTime += Time.deltaTime;
                 }
             }
+        }
+
+        private void ResetTimeCount()
+        {
+            attackDelayTime = 0;
+            attackAnimationDelayTime = 0;
+            isAttackked = false;
         }
     }
 }

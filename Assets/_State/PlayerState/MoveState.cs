@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets._State
 {
-    public class MoveState : BasePlayerState
+    public class MoveState : BaseState
     {
         public override void OnStageEnter(PlayerStateManager stateManager)
         {
@@ -40,7 +40,7 @@ namespace Assets._State
 
             if (stateManager.isWin)
             {
-                stateManager.SwitchState(stateManager.winStage);
+                stateManager.SwitchState(stateManager.winState);
                 return;
             }
 

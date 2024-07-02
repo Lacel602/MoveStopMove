@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.EventSystems.EventTrigger;
 
-public class PlayerAttack : MonoBehaviour
+public class Attackable : MonoBehaviour
 {
     [SerializeField]
     private PlayerStateManager stateManager;
