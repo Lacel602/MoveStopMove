@@ -9,6 +9,8 @@ public class EnemyDeathState : BaseEnemyState
     {
         stateManager.DisableAllAnimations();
         stateManager.animator.SetBool(AnimationStrings.isDead, true);
+
+        stateManager.currentCollider.enabled = false;
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)

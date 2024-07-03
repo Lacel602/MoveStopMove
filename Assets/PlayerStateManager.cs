@@ -55,7 +55,7 @@ public class PlayerStateManager : BaseStateManager
     public DanceState danceState = new DanceState();
     public AttackState attackState = new AttackState();
     public WinState winState = new WinState();
-    public UltiState ultiStage = new UltiState();
+    public UltiState ultiState = new UltiState();
     #endregion
 
     #region Reset
@@ -87,7 +87,7 @@ public class PlayerStateManager : BaseStateManager
     protected override void LoadComponent()
     {
         base.LoadComponent();
-        inputCanvas = GameObject.Find("InputCanvas").GetComponent<Canvas>();
+        inputCanvas = GameObject.Find("UICanvas").GetComponent<Canvas>();
         variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         characterController = this.transform.parent.GetComponent<CharacterController>();
         weaponList = FindChildByName(this.transform.parent, "PlayerWeapons").gameObject;

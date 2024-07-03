@@ -23,6 +23,8 @@ namespace Assets
 
         public bool hasAttacked = false;
 
+        public bool hasUlti = false;
+
         public Weapon currentWeaponScript;
 
         public Collider currentCollider;

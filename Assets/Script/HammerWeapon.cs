@@ -10,7 +10,6 @@ public class HammerWeapon : Weapon
     private void Reset()
     {
         this.LoadComponent();
-
     }
     private void Update()
     {
@@ -117,26 +116,28 @@ public class HammerWeapon : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CheckCollideTag(other))
+        if (isThrowing)
         {
-            var stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
-            var statistic = currentHumanoid.gameObject.GetComponent<Statistic>();
+            if (CheckCollideTag(other))
+            {
+                var stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
+                var statistic = currentHumanoid.gameObject.GetComponent<Statistic>();
 
-            stateManager.currentCollider.enabled = false;
-            //Turn off weapon (need assign to death state)
-            stateManager.currentWeaponScript.gameObject.SetActive(false);
+                //Turn off weapon (need assign to death state)
 
-            //Increased size of current game object
-            stateManager.attackable.IncreaseRange();
-            statistic.OnKillEnemy();
 
-            //Turn off enemy collider
-            //Set alive of hit gameObject to false
-            stateManager.isAlive = false;
+                //Increased size of current game object
+                stateManager.attackable.IncreaseRange();
+                statistic.OnKillEnemy();
 
-            Debug.Log("Hit object");
-            ResetVariable();
-            ResetTransform();
+                //Turn off enemy collider
+                //Set alive of hit gameObject to false
+                stateManager.isAlive = false;
+
+                Debug.Log("Hit object");
+                ResetVariable();
+                ResetTransform();
+            }
         }
     }
 

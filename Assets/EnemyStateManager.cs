@@ -40,9 +40,10 @@ public class EnemyStateManager : BaseStateManager
     private void Start()
     {
         //Enemy start on idle
-        currentState = idleState;
+        currentState = wanderState;
         currentState.OnStageEnter(this);
-        Debug.Log("Enemy is in " + currentState);
+
+        //Debug.Log("Enemy is in " + currentState);
     }
     private void Update()
     {

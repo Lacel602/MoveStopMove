@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
+using static UnityEngine.UI.Image;
 
 public class EnemyWanderState : BaseEnemyState
 {
@@ -60,7 +62,11 @@ public class EnemyWanderState : BaseEnemyState
         stateManager.currentHumanoidTransform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
 
         //Use physic.Raycast to check for wall 
-
+        //if (CheckForWallAhead(stateManager))
+        //{
+        //    //Turn around
+        //    TurnEnenmyAround(stateManager);
+        //}
 
         //Return to idle when time over
         if (wanderTime < wanderTimeMax)
@@ -75,13 +81,35 @@ public class EnemyWanderState : BaseEnemyState
         }
     }
 
+    private void TurnEnenmyAround(EnemyStateManager stateManager)
+    {
+        Debug.Log("TurnAround");
+    }
+
+    Vector3 origin;
+    Vector3 direction;
+    int layerIndex;
+
+    private bool CheckForWallAhead(EnemyStateManager stateManager)
+    {
+        origin = stateManager.currentHumanoidTransform.position;
+        direction = stateManager.currentHumanoidTransform.forward;
+        //Get wall layer
+        layerIndex = LayerMask.NameToLayer("Ground&Wall");
+        //Cast ray
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, 10f, layerIndex))
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void GetTargetRotateDirection(EnemyStateManager stateManager)
     {
         initialRotation = stateManager.currentHumanoidTransform.rotation;
         float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
         targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
 
-        Debug.Log("Target rotation " + targetRotation);
     }
 
     private void RotateOverTime(Transform currentEnemy)
@@ -98,7 +126,7 @@ public class EnemyWanderState : BaseEnemyState
 
             elapsedTime += Time.deltaTime;
 
-            Debug.Log("Enemy rotation: " + currentEnemy.rotation);
+            //Debug.Log("Enemy rotation: " + currentEnemy.rotation);
         }
         else
         {

@@ -15,14 +15,6 @@ public class IdleState : BaseState
 
     public override void OnStageUpdate(PlayerStateManager stateManager)
     {
-        if (stateManager.attackable.HasEnemy)
-        {
-            if (!stateManager.hasAttacked)
-            {
-                stateManager.SwitchState(stateManager.attackState);
-                return;
-            }
-        }
         //Check player alive
         if (!stateManager.isAlive)
         {
@@ -30,10 +22,30 @@ public class IdleState : BaseState
             return;
         }
 
+
         if (stateManager.isWin)
         {
             stateManager.SwitchState(stateManager.winState);
             return;
+        }
+
+        if (stateManager.attackable.HasEnemy)
+        {
+            //Check if player has attacked or not
+            if (!stateManager.hasAttacked)
+            {
+                //Check if player has ulti or not
+                if (!stateManager.hasUlti)
+                {
+                    stateManager.SwitchState(stateManager.attackState);
+                    return;
+                } 
+                else
+                {
+                    stateManager.SwitchState(stateManager.ultiState);
+                    return;
+                }              
+            }
         }
 
         if (stateManager.isJoystickEnable)
