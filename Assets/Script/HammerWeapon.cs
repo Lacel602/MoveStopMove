@@ -79,14 +79,11 @@ public class HammerWeapon : Weapon
         //this.transform.position = Vector3.MoveTowards(this.transform.position, destination, projectileSpeed * Time.deltaTime);
 
         //Move by translate
-        Vector3 target = this.transform.position - destination;
-        this.transform.Translate(-target.normalized * projectileSpeed * Time.deltaTime, Space.World);
+        Vector3 target = destination - startWeaponWorldPos;
+        this.transform.Translate(target.normalized * projectileSpeed * Time.deltaTime, Space.World);
 
         //Rotate weapon
         SelfRotation();
-
-        //Debug.Log("origin" + startWorldPos);
-        //Debug.Log("current pos" + this.transform.position);
 
         //Reset weapon when out of range
         CountDownToReset();

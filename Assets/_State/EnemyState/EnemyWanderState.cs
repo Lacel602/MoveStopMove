@@ -11,7 +11,6 @@ public class EnemyWanderState : BaseEnemyState
     private Quaternion initialRotation;
     private Quaternion targetRotation;
     private float elapsedTime;
-    private bool isRotating = false;
     private bool hasRotate = false;
 
 

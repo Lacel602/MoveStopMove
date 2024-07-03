@@ -12,6 +12,8 @@ namespace Assets._State
         {
             stateManager.DisableAllAnimations();
             stateManager.animator.SetBool(AnimationStrings.isDead, true);
+
+            stateManager.attackable.groundCircle.SetActive(false);
         }
 
         public override void OnStageExit(PlayerStateManager stateManager)

@@ -7,7 +7,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Attackable : MonoBehaviour
 {
     [SerializeField]
-    private GameObject groundCircle;
+    public GameObject groundCircle;
 
     [SerializeField]
     private float radius = 5f;
