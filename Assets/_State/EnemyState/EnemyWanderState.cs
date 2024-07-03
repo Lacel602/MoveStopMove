@@ -12,6 +12,7 @@ public class EnemyWanderState : BaseEnemyState
     private Quaternion targetRotation;
     private float elapsedTime;
     private bool isRotating = false;
+    private bool hasRotate = false;
 
 
     public override void OnStageEnter(EnemyStateManager stateManager)
@@ -51,7 +52,10 @@ public class EnemyWanderState : BaseEnemyState
         }
 
         //Randomfacing
-        RotateOverTime(stateManager.currentHumanoidTransform);
+        if (!hasRotate)
+        {
+            RotateOverTime(stateManager.currentHumanoidTransform);
+        }
 
         //Run infinite until time over (check for wall)
         stateManager.currentHumanoidTransform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
@@ -77,21 +81,25 @@ public class EnemyWanderState : BaseEnemyState
         initialRotation = stateManager.currentHumanoidTransform.rotation;
         float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
         targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
+
+        Debug.Log("Target rotation " + targetRotation);
     }
 
     private void RotateOverTime(Transform currentEnemy)
     {
-        if (!isRotating)
-        {
-            isRotating = true;
-            elapsedTime = 0f;
-        }
-
+        //if (!isRotating)
+        //{
+        //    isRotating = true;
+        //    elapsedTime = 0f;
+        //}
+        //else
         if (elapsedTime < rotationTimeMax)
         {
             currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTimeMax);
 
             elapsedTime += Time.deltaTime;
+
+            Debug.Log("Enemy rotation: " + currentEnemy.rotation);
         }
         else
         {
@@ -99,13 +107,15 @@ public class EnemyWanderState : BaseEnemyState
             currentEnemy.rotation = targetRotation;
 
             //Reset for potential future rotations
-            isRotating = false;
+            hasRotate = true;
         }
     }
 
     private void ResetVariable()
     {
         wanderTime = 0;
-        isRotating = false;
+        //isRotating = false;
+        hasRotate = false;
+        elapsedTime = 0;
     }
 }
