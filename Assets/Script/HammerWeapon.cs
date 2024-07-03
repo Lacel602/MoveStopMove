@@ -43,7 +43,8 @@ public class HammerWeapon : Weapon
 
     private void RotateAndThrowWeapon()
     {
-        Debug.Log(isThrowing);
+        //Debug.Log(isThrowing);
+
         if (isThrowing)
         {
             GetStartPosition();
@@ -121,7 +122,19 @@ public class HammerWeapon : Weapon
     {
         if (CheckCollideTag(other))
         {
-            BaseStateManager stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
+            var stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
+            var statistic = currentHumanoid.gameObject.GetComponent<Statistic>();
+
+            stateManager.currentCollider.enabled = false;
+            //Turn off weapon (need assign to death state)
+            stateManager.currentWeaponScript.gameObject.SetActive(false);
+
+            //Increased size of current game object
+            stateManager.attackable.IncreaseRange();
+            statistic.OnKillEnemy();
+
+            //Turn off enemy collider
+            //Set alive of hit gameObject to false
             stateManager.isAlive = false;
 
             Debug.Log("Hit object");

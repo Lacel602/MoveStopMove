@@ -25,11 +25,14 @@ namespace Assets
 
         public Weapon currentWeaponScript;
 
+        public Collider currentCollider;
+
         protected virtual void LoadComponent()
         {
             currentHumanoidTransform = this.transform.parent;
             animator = this.transform.parent.Find("GFX").GetComponent<Animator>();
             attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
+            currentCollider = currentHumanoidTransform.GetComponent<Collider>();
         }
 
         protected virtual Transform FindChildByName(Transform parent, string name)

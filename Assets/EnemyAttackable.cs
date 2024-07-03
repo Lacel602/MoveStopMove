@@ -5,7 +5,7 @@ public class EnemyAttackable: Attackable
 {
     protected override void TransformTargetCircle()
     {
-        
+        return;
     }
     protected override bool CheckValidObject(Collider hitCollider)
     {

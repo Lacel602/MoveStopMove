@@ -121,4 +121,5 @@ public class PlayerStateManager : BaseStateManager
         isJoystickEnable = true;
         inputCanvas.gameObject.SetActive(true);
     }
+
 }

@@ -129,6 +129,6 @@ public class Attackable : MonoBehaviour
     public void IncreaseRange()
     {
         radius *= 1.1f;
-        groundCircle.transform.localScale = new Vector3(groundCircle.transform.localScale.x * 1.1f, groundCircle.transform.localScale.y * 1.1f, groundCircle.transform.localScale.z);
+        //groundCircle.transform.localScale = new Vector3(groundCircle.transform.localScale.x * 1.1f, groundCircle.transform.localScale.y * 1.1f, groundCircle.transform.localScale.z);
     }
 }

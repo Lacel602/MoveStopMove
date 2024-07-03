@@ -6,7 +6,7 @@ public class EnemyWanderState : BaseEnemyState
     private float wanderTime = 0;
 
     public float rotationTimeMax = 1f; // Duration of the rotation in seconds
-    public float rotationRange = 120f; // Range of rotation in degrees
+    public float rotationRange = 180f; // Range of rotation in degrees
 
     private Quaternion initialRotation;
     private Quaternion targetRotation;
@@ -21,9 +21,7 @@ public class EnemyWanderState : BaseEnemyState
         //Set max wanderTime
         wanderTimeMax = UnityEngine.Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
 
-        initialRotation = stateManager.currentHumanoidTransform.rotation;
-        float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
-        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
+        GetTargetRotateDirection(stateManager);
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
@@ -74,6 +72,13 @@ public class EnemyWanderState : BaseEnemyState
         }
     }
 
+    private void GetTargetRotateDirection(EnemyStateManager stateManager)
+    {
+        initialRotation = stateManager.currentHumanoidTransform.rotation;
+        float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
+        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
+    }
+
     private void RotateOverTime(Transform currentEnemy)
     {
         if (!isRotating)
@@ -84,8 +89,6 @@ public class EnemyWanderState : BaseEnemyState
 
         if (elapsedTime < rotationTimeMax)
         {
-            Debug.Log("Rotate enemy!");
-
             currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTimeMax);
 
             elapsedTime += Time.deltaTime;
