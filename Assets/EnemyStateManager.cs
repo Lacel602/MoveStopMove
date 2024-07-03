@@ -5,27 +5,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Assets.Script;
+using Assets;
 
-public class EnemyStateManager : MonoBehaviour
+public class EnemyStateManager : BaseStateManager
 {
     [Header("Component")]
-    [SerializeField]
-    public Attackable attackable;
-
-    [SerializeField]
-    public Animator animator;
-
-    [SerializeField]
-    public Transform currentEnemy;
 
     [Header("AttackParameter")]
 
     [SerializeField]
     public float attackDelayMax = 1.1f;
-
-    public Weapon currentWeaponScript;
-
-    public Transform projectileContainer;
 
     [Header("StateParameter")]
     public Vector2 idleTime = new Vector2(2f, 3f);
@@ -34,11 +23,6 @@ public class EnemyStateManager : MonoBehaviour
 
     [SerializeField]
     public float moveSpeed = 2f;
-
-    public bool isAlive = true;
-
-    public bool hasAttacked = false;
-
 
     #region StateMachine
     public BaseEnemyState currentState;
@@ -65,12 +49,11 @@ public class EnemyStateManager : MonoBehaviour
         //Update based on stage
         currentState.OnStageUpdate(this);
     }
-    private void LoadComponent()
+    protected override void LoadComponent()
     {
-        currentEnemy = this.transform.parent;
+        base.LoadComponent();
         animator = this.transform.parent.Find("GFX").GetComponent<Animator>();
         attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
-        projectileContainer = GameObject.Find("ProjectileContainer").transform;
         currentWeaponScript = FindChildByName(this.transform.parent, "PlayerWeapons").GetChild(0).GetComponent<Weapon>();
     }
 
@@ -81,33 +64,6 @@ public class EnemyStateManager : MonoBehaviour
 
         //Debug.Log("Switch state");
         //Debug.Log("Enemy is in " + currentState);
-
         newState.OnStageEnter(this);
-    }
-    private Transform FindChildByName(Transform parent, string name)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name == name)
-            {
-                return child;
-            }
-
-            Transform result = FindChildByName(child, name);
-            if (result != null)
-            {
-                return result;
-            }
-        }
-
-        return null;
-    }
-
-    public void DisableAllAnimations()
-    {
-        foreach (var anim in AnimationStrings.listAnimations)
-        {
-            animator.SetBool(anim, false);
-        }
-    }
+    }    
 }

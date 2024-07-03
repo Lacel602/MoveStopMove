@@ -1,3 +1,4 @@
+using Assets;
 using Assets._State;
 using Assets._State.PlayerState;
 using Assets.Script;
@@ -7,11 +8,9 @@ using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-public class PlayerStateManager : MonoBehaviour
+public class PlayerStateManager : BaseStateManager
 {
     [Header("Component")]
-    [SerializeField]
-    internal Attackable attackable;
 
     [SerializeField]
     internal VariableJoystick variableJoystick;
@@ -22,41 +21,31 @@ public class PlayerStateManager : MonoBehaviour
     [SerializeField]
     internal CharacterController characterController;
 
-    [SerializeField]
-    internal Animator animator;
+    
 
     [Header("MovementParameter")]
     [SerializeField]
-    public float speed = 5f;
+    public float moveSpeed = 5f;
 
     [SerializeField]
     public float rotationSpeed = 10f;
 
     [Header("AttackParameter")]
-    [SerializeField]
-    internal Transform playerTransform;
+    protected GameObject weaponList;
 
     [SerializeField]
-    internal float attackDelayMax = 0.8f;
-
-    private GameObject weaponList;
+    public float attackDelayMax = 0.8f;
 
     public GameObject[] weapons;
-
-    public Weapon currentWeaponScript;
-
-    public Transform projectileContainer;
 
     [Header("StateParameter")]
     public bool isJoystickEnable = false;
 
-    public bool isAlive = true;
-
-    public bool hasAttacked = false;
-
     public bool isWin = false;
 
     public bool isDance = false;
+
+
 
     #region StateMachine
     public BaseState currentState;
@@ -95,35 +84,13 @@ public class PlayerStateManager : MonoBehaviour
         }
     }
 
-    private void LoadComponent()
+    protected override void LoadComponent()
     {
+        base.LoadComponent();
         inputCanvas = GameObject.Find("InputCanvas").GetComponent<Canvas>();
         variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         characterController = this.transform.parent.GetComponent<CharacterController>();
-        animator = this.transform.parent.Find("Character_Optimieze2").GetComponent<Animator>();
-        attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
-        playerTransform = this.transform.parent;
-        weaponList = FindChildByName(this.transform.parent,"PlayerWeapons").gameObject;
-        
-    }
-
-    private Transform FindChildByName(Transform parent, string name)
-    {
-        foreach (Transform child in parent)
-        {
-            if (child.name == name)
-            {
-                return child;
-            }
-
-            Transform result = FindChildByName(child, name);
-            if (result != null)
-            {
-                return result;
-            }
-        }
-
-        return null;
+        weaponList = FindChildByName(this.transform.parent, "PlayerWeapons").gameObject;
     }
     #endregion
 
@@ -153,13 +120,5 @@ public class PlayerStateManager : MonoBehaviour
     {
         isJoystickEnable = true;
         inputCanvas.gameObject.SetActive(true);
-    }
-
-    public void DisableAllAnimations()
-    {
-        foreach (var anim in AnimationStrings.listAnimations)
-        {
-            animator.SetBool(anim, false);
-        }
     }
 }

@@ -71,7 +71,7 @@ namespace Assets._State
                 Transform player = stateManager.transform;
                 Transform enemy = stateManager.attackable.Enemy.transform;
                 Vector3 direction = new Vector3(enemy.position.x, player.position.y, enemy.position.z);
-                stateManager.playerTransform.LookAt(direction);
+                stateManager.currentHumanoidTransform.LookAt(direction);
             }
 
             //Check move state

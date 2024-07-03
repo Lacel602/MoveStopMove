@@ -10,7 +10,8 @@ namespace Assets._State
     {
         public override void OnStageEnter(PlayerStateManager stateManager)
         {
-
+            stateManager.DisableAllAnimations();
+            stateManager.animator.SetBool(AnimationStrings.isDead, true);
         }
 
         public override void OnStageExit(PlayerStateManager stateManager)

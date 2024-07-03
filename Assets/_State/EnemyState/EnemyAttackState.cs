@@ -2,11 +2,11 @@
 
 public class EnemyAttackState : BaseEnemyState
 {
-    private float attackAnimationDelayTime = 0f;
+    private float eslapsedFinishTime = 0f;
 
     private bool isAttackked = false;
 
-    private float attackDelayTime = 0f;
+    private float eslapedWeaponThrowTime = 0f;
 
     private Vector3 enemyPos = Vector3.zero;
     public override void OnStageEnter(EnemyStateManager stateManager)
@@ -39,7 +39,7 @@ public class EnemyAttackState : BaseEnemyState
     {
         if (!stateManager.isAlive)
         {
-            //this.ResetVariable();
+            this.ResetVariable();
             stateManager.SwitchState(stateManager.deathState);
             return;
         }
@@ -50,15 +50,15 @@ public class EnemyAttackState : BaseEnemyState
             Transform player = stateManager.transform;
             Transform enemy = stateManager.attackable.Enemy.transform;
             Vector3 direction = new Vector3(enemy.position.x, player.position.y, enemy.position.z);
-            stateManager.currentEnemy.LookAt(direction);
+            stateManager.currentHumanoidTransform.LookAt(direction);
         }
 
         if (stateManager.hasAttacked)
         {
             //Check if attack animation has played for a amount of time before throw weapon
-            if (attackDelayTime < stateManager.attackDelayMax / 4)
+            if (eslapedWeaponThrowTime < stateManager.attackDelayMax / 4)
             {
-                attackDelayTime += Time.deltaTime;
+                eslapedWeaponThrowTime += Time.deltaTime;
             }
             else
             {
@@ -71,7 +71,7 @@ public class EnemyAttackState : BaseEnemyState
             }
 
             //Ensure attack animation done before return to idle state
-            if (attackAnimationDelayTime >= stateManager.attackDelayMax)
+            if (eslapsedFinishTime >= stateManager.attackDelayMax)
             {
                 ResetVariable();
                 stateManager.SwitchState(stateManager.idleState);
@@ -79,15 +79,15 @@ public class EnemyAttackState : BaseEnemyState
             }
             else
             {
-                attackAnimationDelayTime += Time.deltaTime;
+                eslapsedFinishTime += Time.deltaTime;
             }
         }
     }
 
     private void ResetVariable()
     {
-        attackDelayTime = 0;
-        attackAnimationDelayTime = 0;
+        eslapedWeaponThrowTime = 0;
+        eslapsedFinishTime = 0;
         isAttackked = false;
     }
 }

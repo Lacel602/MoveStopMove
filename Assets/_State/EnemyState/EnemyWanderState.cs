@@ -1,12 +1,11 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyWanderState : BaseEnemyState
 {
     private float wanderTimeMax;
     private float wanderTime = 0;
 
-    public float duration = 1f; // Duration of the rotation in seconds
+    public float rotationTimeMax = 1f; // Duration of the rotation in seconds
     public float rotationRange = 120f; // Range of rotation in degrees
 
     private Quaternion initialRotation;
@@ -21,6 +20,10 @@ public class EnemyWanderState : BaseEnemyState
 
         //Set max wanderTime
         wanderTimeMax = UnityEngine.Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
+
+        initialRotation = stateManager.currentHumanoidTransform.rotation;
+        float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
+        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
@@ -35,13 +38,6 @@ public class EnemyWanderState : BaseEnemyState
             stateManager.hasAttacked = !stateManager.hasAttacked;
         }
 
-        if (stateManager.attackable.HasEnemy)
-        {
-            this.ResetVariable();
-            stateManager.SwitchState(stateManager.attackState);
-            return;
-        }
-
         if (!stateManager.isAlive)
         {
             this.ResetVariable();
@@ -49,15 +45,21 @@ public class EnemyWanderState : BaseEnemyState
             return;
         }
 
-        //Enemy movement here
+        if (stateManager.attackable.HasEnemy)
+        {
+            this.ResetVariable();
+            stateManager.SwitchState(stateManager.attackState);
+            return;
+        }
 
         //Randomfacing
-        RotateOverTime(stateManager.currentEnemy);
+        RotateOverTime(stateManager.currentHumanoidTransform);
 
         //Run infinite until time over (check for wall)
-        stateManager.currentEnemy.transform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
+        stateManager.currentHumanoidTransform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
 
-        //Use physic to check for wall 
+        //Use physic.Raycast to check for wall 
+
 
         //Return to idle when time over
         if (wanderTime < wanderTimeMax)
@@ -80,18 +82,21 @@ public class EnemyWanderState : BaseEnemyState
             elapsedTime = 0f;
         }
 
-        if (elapsedTime < duration)
+        if (elapsedTime < rotationTimeMax)
         {
-            currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / duration);
+            Debug.Log("Rotate enemy!");
+
+            currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTimeMax);
+
             elapsedTime += Time.deltaTime;
         }
         else
         {
-            // Ensure the object reaches the exact target rotation at the end
+            //Ensure the object reaches the exact target rotation at the end
             currentEnemy.rotation = targetRotation;
 
-            // Reset for potential future rotations
-            isRotating = false; 
+            //Reset for potential future rotations
+            isRotating = false;
         }
     }
 
@@ -100,6 +105,4 @@ public class EnemyWanderState : BaseEnemyState
         wanderTime = 0;
         isRotating = false;
     }
-
-    
 }

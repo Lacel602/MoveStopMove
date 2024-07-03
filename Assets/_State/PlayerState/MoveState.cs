@@ -55,7 +55,7 @@ namespace Assets._State
                     return;
                 }
 
-                stateManager.characterController.SimpleMove(moveDirection * stateManager.speed);
+                stateManager.characterController.SimpleMove(moveDirection * stateManager.moveSpeed);
 
                 stateManager.animator.SetBool(AnimationStrings.isIdle, false);
 

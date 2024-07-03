@@ -21,6 +21,8 @@ namespace Assets.Script
         [Header("Component")]
         [SerializeField]
         protected Transform projectileContainer;
+        [SerializeField]
+        protected GameObject currentHumanoid;
 
         [Header("OriginTransform")]
         [SerializeField]

@@ -13,7 +13,6 @@ public class EnemyAttackable: Attackable
         {
             return true;
         }
-
         return false;
     }
 }

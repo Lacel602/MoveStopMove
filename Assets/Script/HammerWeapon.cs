@@ -1,3 +1,4 @@
+using Assets;
 using Assets.Script;
 using System;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class HammerWeapon : Weapon
     private void Reset()
     {
         this.LoadComponent();
-        
+
     }
     private void Update()
     {
@@ -25,8 +26,20 @@ public class HammerWeapon : Weapon
         originScale = this.transform.localScale;
         projectileSpeed = 6f;
         projectileMaxFlyTime = 1.5f;
+        currentHumanoid = GetParent(this.transform, 12);
     }
 
+    private GameObject GetParent(Transform transform, int count)
+    {
+        Transform result = transform;
+        while (count > 0)
+        {
+            result = result.parent;
+            count--;
+        }
+
+        return result.gameObject;
+    }
 
     private void RotateAndThrowWeapon()
     {
@@ -61,8 +74,12 @@ public class HammerWeapon : Weapon
         //Get throwing destination
         Vector3 destination = new Vector3(enemyPos.x, transform.position.y, enemyPos.z);
 
-        //Move weapon
-        this.transform.position = Vector3.MoveTowards(this.transform.position, destination, projectileSpeed * Time.deltaTime);
+        //Move by move toward
+        //this.transform.position = Vector3.MoveTowards(this.transform.position, destination, projectileSpeed * Time.deltaTime);
+
+        //Move by translate
+        Vector3 target = this.transform.position - destination;
+        this.transform.Translate(-target.normalized * projectileSpeed * Time.deltaTime, Space.World);
 
         //Rotate weapon
         SelfRotation();
@@ -74,35 +91,18 @@ public class HammerWeapon : Weapon
         CountDownToReset();
     }
 
-    
     private void CountDownToReset()
     {
         if (currentFlyingTime < projectileMaxFlyTime)
         {
             currentFlyingTime += Time.deltaTime;
-        } 
+        }
         else
         {
             Debug.Log("Stop throwing");
             ResetVariable();
             ResetTransform();
         }
-
-        //Get distant from startPos to currentPos in 2D
-        //float distance = GetDistanceFromStartPos();
-
-        //Reset weapon when out of range
-        //if (distance > projectileMaxFlyTime)
-        //{
-            
-        //}
-    }
-
-    private float GetDistanceFromStartPos()
-    {
-        Vector2 originWorldPosV2 = new Vector2(startWeaponWorldPos.x, startWeaponWorldPos.z);
-        Vector2 transformPosV2 = new Vector2(this.transform.position.x, this.transform.position.z);
-        return Vector2.Distance(originWorldPosV2, transformPosV2);
     }
 
     protected override void ResetVariable()
@@ -119,11 +119,23 @@ public class HammerWeapon : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (CheckCollideTag(other))
         {
+            BaseStateManager stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
+            stateManager.isAlive = false;
+
             Debug.Log("Hit object");
             ResetVariable();
             ResetTransform();
         }
+    }
+
+    private bool CheckCollideTag(Collider other)
+    {
+        if ((other.CompareTag("Enemy") || other.CompareTag("Player")) && other.gameObject != currentHumanoid)
+        {
+            return true;
+        }
+        return false;
     }
 }
