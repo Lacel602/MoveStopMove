@@ -32,7 +32,7 @@ public class EnemyStateManager : BaseStateManager
     public EnemyAttackState attackState = new EnemyAttackState();
     #endregion
 
-    private void Reset()
+    public void Reset()
     {
         this.LoadComponent();
     }

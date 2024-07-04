@@ -7,6 +7,9 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class Attackable : MonoBehaviour
 {
     [SerializeField]
+    private Statistic currentStat;
+
+    [SerializeField]
     public GameObject groundCircle;
 
     [SerializeField]
@@ -40,13 +43,14 @@ public class Attackable : MonoBehaviour
         groundCircle = GameObject.Find("GroundCircle").gameObject;
         targetCircle = GameObject.Find("TargetCircle").gameObject;
         currentHumanoid = this.transform.parent.parent.gameObject;
+        currentStat = currentHumanoid.GetComponent<Statistic>();
     }
 
     private void FixedUpdate()
     {
         enemy = FindEnemies(this.transform.position, radius);
 
-        TransformTargetCircle();    
+        TransformTargetCircle();
     }
 
     protected virtual void TransformTargetCircle()
@@ -75,7 +79,7 @@ public class Attackable : MonoBehaviour
 
     private GameObject FindEnemies(Vector3 center, float radius)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(center, radius);
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius * (float)Math.Pow(1.1f, currentStat.level));
         foreach (var hitCollider in hitColliders)
         {
             if (CheckValidObject(hitCollider))
@@ -101,7 +105,7 @@ public class Attackable : MonoBehaviour
             if (CheckValidObject(hitCollider))
             {
                 return hitCollider.gameObject;
-            }        
+            }
         }
 
         hasEnemy = false;
@@ -123,7 +127,7 @@ public class Attackable : MonoBehaviour
     {
         // Draw a yellow sphere at the transform's position to visualize the detection radius
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(transform.position, radius * (float) Math.Pow(1.1f, currentStat.level));
     }
 
     public void IncreaseRange()

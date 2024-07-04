@@ -7,7 +7,10 @@ using UnityEngine;
 public class Statistic : MonoBehaviour
 {
     [SerializeField]
-    private int score = 0;
+    public int score = 0;
+
+    [SerializeField]
+    public int level = 0;
 
     [SerializeField]
     private TMP_Text scroreTMP;
@@ -24,11 +27,12 @@ public class Statistic : MonoBehaviour
 
     public void OnKillEnemy()
     {
-        //Increased size
-        this.transform.localScale *= 1.1f;
-
-        //Increased score
+        //Increased score and level
         score++;
+        level++;
+
+        //Reset size of player
+        this.transform.localScale *= (float)Math.Pow(1.1f, level);
 
         //Change TMP score text
         scroreTMP.text = score.ToString();

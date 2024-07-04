@@ -120,19 +120,15 @@ public class HammerWeapon : Weapon
         {
             if (CheckCollideTag(other))
             {
-                var stateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
-                var statistic = currentHumanoid.gameObject.GetComponent<Statistic>();
-
-                //Turn off weapon (need assign to death state)
-
+                var enemyStateManager = other.gameObject.GetComponentInChildren<BaseStateManager>();
+                var stat = currentHumanoid.gameObject.GetComponent<Statistic>();
+                var enemyStat = other.gameObject.GetComponent<Statistic>();
 
                 //Increased size of current game object
-                stateManager.attackable.IncreaseRange();
-                statistic.OnKillEnemy();
 
-                //Turn off enemy collider
+                stat.OnKillEnemy();
                 //Set alive of hit gameObject to false
-                stateManager.isAlive = false;
+                enemyStateManager.isAlive = false;
 
                 Debug.Log("Hit object");
                 ResetVariable();

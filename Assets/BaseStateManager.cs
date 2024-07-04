@@ -29,12 +29,15 @@ namespace Assets
 
         public Collider currentCollider;
 
+        public Statistic currentStatistic;
+
         protected virtual void LoadComponent()
         {
             currentHumanoidTransform = this.transform.parent;
             animator = this.transform.parent.Find("GFX").GetComponent<Animator>();
             attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
             currentCollider = currentHumanoidTransform.GetComponent<Collider>();
+            currentStatistic = currentHumanoidTransform.GetComponent<Statistic>();
         }
 
         protected virtual Transform FindChildByName(Transform parent, string name)

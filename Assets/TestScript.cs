@@ -19,10 +19,12 @@ public class TestScript : MonoBehaviour
             {
                 Debug.Log("NotFound");
             }
-            enemyStates.Add(script);
+
+            script.Reset();
+            //enemyStates.Add(script);
         }
 
-        ChangeValue();
+        //ChangeValue();
     }
 
     private void ChangeValue()

@@ -11,10 +11,13 @@ public class EnemyDeathState : BaseEnemyState
         stateManager.animator.SetBool(AnimationStrings.isDead, true);
 
         stateManager.currentCollider.enabled = false;
+
+        EnemySpawnManager.Instance.OnEnemyKilled(stateManager.currentHumanoidTransform.gameObject, stateManager.currentStatistic);
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
     {
+
     }
 
     public override void OnStageUpdate(EnemyStateManager stateManager)
