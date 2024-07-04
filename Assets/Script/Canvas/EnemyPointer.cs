@@ -6,7 +6,7 @@ using UnityEngine;
 public class EnemyPointer : MonoBehaviour
 {
     [SerializeField]
-    private GameObject target;
+    public GameObject target;
     [SerializeField]
     private RectTransform pointerRectTransform;
     [SerializeField]
@@ -29,15 +29,20 @@ public class EnemyPointer : MonoBehaviour
 
     private void Update()
     {
-        //Get enemy screen pos
+        MoveAndRotateIndicator();
+    }
+
+    private void MoveAndRotateIndicator()
+    {
         Vector3 screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
 
         bool isOffScreen = screenPos.x < 0 || screenPos.x > Screen.width || screenPos.y < 0 || screenPos.y > Screen.height;
 
-        if (isOffScreen)
+        if (isOffScreen && target.activeSelf)
         {
             arrow.gameObject.SetActive(true);
 
+            //Move arrow
             Vector3 cappedScreenPos = screenPos;
             cappedScreenPos.z = 0;
             cappedScreenPos.x = Mathf.Clamp(cappedScreenPos.x, 20, Screen.width - 20);
@@ -45,6 +50,7 @@ public class EnemyPointer : MonoBehaviour
 
             arrow.transform.position = cappedScreenPos;
 
+            //Rotate arrow
             //Get center point of screen
             Vector2 centerScreen = new Vector2(Screen.width / 2, Screen.height / 2);
 
@@ -58,7 +64,5 @@ public class EnemyPointer : MonoBehaviour
         {
             arrow.gameObject.SetActive(false);
         }
-
-        Debug.Log(arrow.transform.position);
     }
 }

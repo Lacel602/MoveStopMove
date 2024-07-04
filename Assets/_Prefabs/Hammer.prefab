@@ -115,7 +115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94afcb48e7edc1d4d975a088655348fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileSpeed: 8
+  projectileSpeed: 10
   projectileMaxFlyTime: 1.5
   projectileContainer: {fileID: 0}
   currentHumanoid: {fileID: 0}
