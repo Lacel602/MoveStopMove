@@ -3,7 +3,7 @@ using Assets.Script;
 using System;
 using UnityEngine;
 
-public class HammerWeapon : Weapon
+public class RotateWeapon : Weapon
 {
     private bool isRotate = false;
 

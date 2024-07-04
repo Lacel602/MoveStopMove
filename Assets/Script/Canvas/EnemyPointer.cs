@@ -1,0 +1,64 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyPointer : MonoBehaviour
+{
+    [SerializeField]
+    private GameObject target;
+    [SerializeField]
+    private RectTransform pointerRectTransform;
+    [SerializeField]
+    private Transform player;
+    [SerializeField]
+    private GameObject arrow;
+
+    private void Reset()
+    {
+        this.LoadComponent();
+    }
+
+    private void LoadComponent()
+    {
+        target = GameObject.Find("ActiveEnemy").transform.GetChild(0).gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
+        pointerRectTransform = arrow.GetComponent<RectTransform>();
+        player = GameObject.Find("Player").transform;
+    }
+
+    private void Update()
+    {
+        //Get enemy screen pos
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(target.transform.position);
+
+        bool isOffScreen = screenPos.x < 0 || screenPos.x > Screen.width || screenPos.y < 0 || screenPos.y > Screen.height;
+
+        if (isOffScreen)
+        {
+            arrow.gameObject.SetActive(true);
+
+            Vector3 cappedScreenPos = screenPos;
+            cappedScreenPos.z = 0;
+            cappedScreenPos.x = Mathf.Clamp(cappedScreenPos.x, 20, Screen.width - 20);
+            cappedScreenPos.y = Mathf.Clamp(cappedScreenPos.y, 20, Screen.height - 20);
+
+            arrow.transform.position = cappedScreenPos;
+
+            //Get center point of screen
+            Vector2 centerScreen = new Vector2(Screen.width / 2, Screen.height / 2);
+
+            //Caculate the angle tan(y/x)
+            float angle = Mathf.Atan2(cappedScreenPos.y - centerScreen.y, cappedScreenPos.x - centerScreen.x) * Mathf.Rad2Deg;
+
+            //Rotate the arrow 
+            arrow.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+        }
+        else
+        {
+            arrow.gameObject.SetActive(false);
+        }
+
+        Debug.Log(arrow.transform.position);
+    }
+}

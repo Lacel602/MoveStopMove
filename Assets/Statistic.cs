@@ -32,7 +32,7 @@ public class Statistic : MonoBehaviour
         level++;
 
         //Reset size of player
-        this.transform.localScale *= (float)Math.Pow(1.1f, level);
+        this.transform.localScale *= ConstantStat.increaseSize;
 
         //Change TMP score text
         scroreTMP.text = score.ToString();

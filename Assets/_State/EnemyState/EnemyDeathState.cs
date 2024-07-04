@@ -12,7 +12,7 @@ public class EnemyDeathState : BaseEnemyState
 
         stateManager.currentCollider.enabled = false;
 
-        EnemySpawnManager.Instance.OnEnemyKilled(stateManager.currentHumanoidTransform.gameObject, stateManager.currentStatistic);
+        
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
@@ -28,6 +28,10 @@ public class EnemyDeathState : BaseEnemyState
         } else {
             eslapsedTime = 0f;
             stateManager.currentHumanoidTransform.gameObject.SetActive(false);
+
+            EnemySpawnManager.Instance.OnEnemyKilled(stateManager.currentHumanoidTransform.gameObject, stateManager.currentStatistic);
+
+            stateManager.SwitchState(stateManager.idleState);
         }
     }
 }

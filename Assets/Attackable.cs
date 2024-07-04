@@ -40,7 +40,7 @@ public class Attackable : MonoBehaviour
 
     protected virtual void LoadComponent()
     {
-        groundCircle = GameObject.Find("GroundCircle").gameObject;
+        groundCircle = this.transform.Find("GroundCircle").gameObject;
         targetCircle = GameObject.Find("TargetCircle").gameObject;
         currentHumanoid = this.transform.parent.parent.gameObject;
         currentStat = currentHumanoid.GetComponent<Statistic>();
@@ -79,7 +79,7 @@ public class Attackable : MonoBehaviour
 
     private GameObject FindEnemies(Vector3 center, float radius)
     {
-        Collider[] hitColliders = Physics.OverlapSphere(center, radius * (float)Math.Pow(1.1f, currentStat.level));
+        Collider[] hitColliders = Physics.OverlapSphere(center, radius * (float)Math.Pow(ConstantStat.increaseSize, currentStat.level));
         foreach (var hitCollider in hitColliders)
         {
             if (CheckValidObject(hitCollider))
@@ -127,12 +127,6 @@ public class Attackable : MonoBehaviour
     {
         // Draw a yellow sphere at the transform's position to visualize the detection radius
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, radius * (float) Math.Pow(1.1f, currentStat.level));
-    }
-
-    public void IncreaseRange()
-    {
-        radius *= 1.1f;
-        //groundCircle.transform.localScale = new Vector3(groundCircle.transform.localScale.x * 1.1f, groundCircle.transform.localScale.y * 1.1f, groundCircle.transform.localScale.z);
+        Gizmos.DrawWireSphere(transform.position, radius * (float) Math.Pow(ConstantStat.increaseSize, currentStat.level));
     }
 }

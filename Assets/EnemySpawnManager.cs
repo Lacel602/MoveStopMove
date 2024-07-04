@@ -27,7 +27,6 @@ public class EnemySpawnManager : MonoBehaviour
     private static EnemySpawnManager _instance;
     //Create list color;
     //Random material color when spawned;
-    protected EnemySpawnManager() { }
     public static EnemySpawnManager Instance
     {
         get
@@ -77,8 +76,6 @@ public class EnemySpawnManager : MonoBehaviour
 
         enemy.transform.position = new Vector3(posX, enemy.transform.position.y, posZ);
 
-        enemy.SetActive(true);
-
         BaseStateManager enemyStateManager = enemy.GetComponentInChildren<BaseStateManager>();
 
         //Enable collider 
@@ -86,6 +83,7 @@ public class EnemySpawnManager : MonoBehaviour
         //Set enemy alive to true
         enemyStateManager.isAlive = true;
 
+        enemy.SetActive(true);
 
         enemy.transform.parent = activeEnemyParent.transform;
 
