@@ -5,6 +5,7 @@ using Assets;
 public class EnemyStateManager : BaseStateManager
 {
     [Header("Component")]
+    public LayerMask wallLayer;
 
     [Header("AttackParameter")]
 
@@ -15,6 +16,8 @@ public class EnemyStateManager : BaseStateManager
     public Vector2 idleTime = new Vector2(2f, 3f);
 
     public Vector2 wanderTime = new Vector2(2f, 4f);
+
+    public bool isWallAhead;
 
     [SerializeField]
     public float moveSpeed = 2f;
@@ -61,5 +64,10 @@ public class EnemyStateManager : BaseStateManager
         //Debug.Log("Switch state");
         //Debug.Log("Enemy is in " + currentState);
         newState.OnStageEnter(this);
-    }    
+    }
+
+    private void OnDrawGizmos()
+    {
+        
+    }
 }

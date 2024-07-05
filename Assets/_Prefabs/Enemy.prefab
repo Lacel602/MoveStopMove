@@ -86,9 +86,13 @@ MonoBehaviour:
   currentWeaponScript: {fileID: 1110465846816245544}
   currentCollider: {fileID: 2432808505634587318}
   currentStatistic: {fileID: 7691337555995371454}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 128
   attackDelayMax: 1.1
   idleTime: {x: 0.5, y: 3}
   wanderTime: {x: 2, y: 5}
+  isWallAhead: 0
   moveSpeed: 2
 --- !u!1 &1234252274221341572
 GameObject:

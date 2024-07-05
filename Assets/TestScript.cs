@@ -7,8 +7,12 @@ public class TestScript : MonoBehaviour
 {
     [SerializeField]
     public List<EnemyStateManager> enemyStates = new List<EnemyStateManager>();
+
+    [SerializeField]
+    private LayerMask layer;
     private void Reset()
     {
+        layer = LayerMask.NameToLayer("Ground&Wall");
         for (int i = 0; i < transform.childCount; i++)
         {
             var script = transform.GetChild(i).GetComponentInChildren<EnemyStateManager>();
@@ -20,7 +24,9 @@ public class TestScript : MonoBehaviour
                 Debug.Log("NotFound");
             }
 
-            script.Reset();
+            //script.Reset();
+            script.wallLayer = layer;
+
             //enemyStates.Add(script);
         }
 

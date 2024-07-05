@@ -1,6 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
-using static UnityEngine.UI.Image;
+﻿using UnityEngine;
 
 public class EnemyWanderState : BaseEnemyState
 {
@@ -21,9 +19,9 @@ public class EnemyWanderState : BaseEnemyState
         stateManager.DisableAllAnimations();
 
         //Set max wanderTime
-        wanderTimeMax = UnityEngine.Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
+        wanderTimeMax = Random.Range(stateManager.wanderTime.x, stateManager.wanderTime.y);
 
-        GetTargetRotateDirection(stateManager);
+        targetRotation = GetTargetRotateDirection(stateManager, rotationRange);
     }
 
     public override void OnStageExit(EnemyStateManager stateManager)
@@ -55,18 +53,25 @@ public class EnemyWanderState : BaseEnemyState
         //Randomfacing
         if (!hasRotate)
         {
-            RotateOverTime(stateManager.currentHumanoidTransform);
+            int random = Random.Range(1, 101);
+            if (random >= 40)
+            {
+                RotateOverTime(stateManager.currentHumanoidTransform);
+            }
         }
 
         //Run infinite until time over (check for wall)
         stateManager.currentHumanoidTransform.Translate(Vector3.forward * stateManager.moveSpeed * Time.deltaTime);
 
         //Use physic.Raycast to check for wall 
-        //if (CheckForWallAhead(stateManager))
-        //{
-        //    //Turn around
-        //    TurnEnenmyAround(stateManager);
-        //}
+        if (CheckForWallAhead(stateManager))
+        {
+            //Turn around
+            stateManager.isWallAhead = true;
+            this.ResetVariable();
+            stateManager.SwitchState(stateManager.idleState);
+            return;
+        }
 
         //Return to idle when time over
         if (wanderTime < wanderTimeMax)
@@ -81,45 +86,29 @@ public class EnemyWanderState : BaseEnemyState
         }
     }
 
-    private void TurnEnenmyAround(EnemyStateManager stateManager)
-    {
-        Debug.Log("TurnAround");
-    }
-
-    Vector3 origin;
-    Vector3 direction;
-    int layerIndex;
-
     private bool CheckForWallAhead(EnemyStateManager stateManager)
     {
-        origin = stateManager.currentHumanoidTransform.position;
-        direction = stateManager.currentHumanoidTransform.forward;
-        //Get wall layer
-        layerIndex = LayerMask.NameToLayer("Ground&Wall");
+        Vector3 origin = stateManager.currentHumanoidTransform.position;
+        Vector3 direction = stateManager.currentHumanoidTransform.forward.normalized;
         //Cast ray
-        if (Physics.Raycast(origin, direction, out RaycastHit hit, 10f, layerIndex))
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, 5f, stateManager.wallLayer))
         {
             return true;
         }
         return false;
     }
 
-    private void GetTargetRotateDirection(EnemyStateManager stateManager)
+    private Quaternion GetTargetRotateDirection(EnemyStateManager stateManager, float range)
     {
         initialRotation = stateManager.currentHumanoidTransform.rotation;
-        float randomAngle = Random.Range(-rotationRange / 2f, rotationRange / 2f); // Generate a random angle within the range
-        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
+        float randomAngle = Random.Range(-range / 2f, range / 2f); // Generate a random angle within the range
+        Quaternion target = initialRotation * Quaternion.Euler(0, randomAngle, 0); // Calculate target rotation
 
+        return target;
     }
 
     private void RotateOverTime(Transform currentEnemy)
     {
-        //if (!isRotating)
-        //{
-        //    isRotating = true;
-        //    elapsedTime = 0f;
-        //}
-        //else
         if (elapsedTime < rotationTimeMax)
         {
             currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTimeMax);
