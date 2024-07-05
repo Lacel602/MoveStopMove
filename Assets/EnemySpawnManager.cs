@@ -1,9 +1,6 @@
 using Assets;
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawnManager : MonoBehaviour
@@ -91,7 +88,8 @@ public class EnemySpawnManager : MonoBehaviour
             deactiveEnemyList.Remove(enemy);
             activeEnemyList.Add(enemy);
         }
-        Debug.Log("SpawnEnemy");
+
+        //Debug.Log("SpawnEnemy " + enemy.name);
     }
 
     private void LoadComponent()
@@ -119,11 +117,10 @@ public class EnemySpawnManager : MonoBehaviour
         enemyOutMap++;
         //Set enemy left text in UI
         int enemyleft = enemyTotal - enemyOutMap;
-        Debug.Log("Enemyleft" + enemyleft);
+        //Debug.Log("Enemyleft " + enemyleft);
 
         if (enemyLeftText == null)
         {
-            Debug.Log("Wtf");
             Debug.Log(activeEnemyList[0].name);
         }
         enemyLeftText.text = enemyleft.ToString();

@@ -96,7 +96,7 @@ public class RotateWeapon : Weapon
         }
         else
         {
-            Debug.Log("Stop throwing");
+            //Debug.Log("Stop throwing");
             ResetVariable();
             ResetTransform();
         }
@@ -130,7 +130,7 @@ public class RotateWeapon : Weapon
                 //Set alive of hit gameObject to false
                 enemyStateManager.isAlive = false;
 
-                Debug.Log("Hit object");
+                //Debug.Log("Hit object");
                 ResetVariable();
                 ResetTransform();
             }

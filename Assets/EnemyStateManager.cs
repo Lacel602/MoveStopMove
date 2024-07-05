@@ -1,9 +1,4 @@
-using Assets._State.PlayerState;
-using Assets._State;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using Assets.Script;
 using Assets;
 
