@@ -33,14 +33,14 @@ public class FollowPlayer : MonoBehaviour
         Vector3 direction = (player.transform.position - this.transform.position).normalized;
         if (Physics.Raycast(this.transform.position, direction, out RaycastHit hit, 100f, layerToHit))
         {
-            Debug.Log("ray cast hit something");
+            //Debug.Log("ray cast hit something");
             Obstacle obstacle = hit.collider.gameObject.GetComponent<Obstacle>();
             obstacle.IsOverCastPlayer = true;
             oldObstacle = obstacle;
         } 
         else
         {
-            Debug.Log("ray cast hit nothing");
+            //Debug.Log("ray cast hit nothing");
             if (oldObstacle != null)
             {
                 oldObstacle.IsOverCastPlayer = false;

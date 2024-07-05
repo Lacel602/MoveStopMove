@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets
 {
-    public class BaseStateManager: MonoBehaviour
+    public class BaseStateManager : MonoBehaviour
     {
         [SerializeField]
         public Transform currentHumanoidTransform;
@@ -65,6 +65,13 @@ namespace Assets
             {
                 animator.SetBool(anim, false);
             }
+        }
+
+        public virtual void ResetVariable()
+        {
+            isAlive = true;
+            hasAttacked = false;
+            hasUlti = false;
         }
     }
 }

@@ -70,11 +70,11 @@ public class EnemyAttackState : BaseEnemyState
                 }
             }
 
-            //Ensure attack animation done before return to idle state
+            //Ensure attack animation done before return to wanderState state
             if (eslapsedFinishTime >= stateManager.attackDelayMax)
             {
                 ResetVariable();
-                stateManager.SwitchState(stateManager.idleState);
+                stateManager.SwitchState(stateManager.wanderState);
                 return;
             }
             else

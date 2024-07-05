@@ -44,7 +44,7 @@ namespace Assets.Script
         [SerializeField]
         public Vector3 enemyPos;
 
-        public abstract void ThrowWeapon(Vector3 enemyPos);
+        public abstract void MoveWeapon(Vector3 enemyPos);
 
         protected virtual void ResetTransform()
         {

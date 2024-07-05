@@ -5,12 +5,12 @@ public class EnemyWanderState : BaseEnemyState
     private float wanderTimeMax;
     private float wanderTime = 0;
 
-    public float rotationTimeMax = 1f; // Duration of the rotation in seconds
-    public float rotationRange = 180f; // Range of rotation in degrees
+    private float rotationTime;
+    public float rotationTimeMax = 1f; 
+    public float rotationRange = 180f; 
 
     private Quaternion initialRotation;
     private Quaternion targetRotation;
-    private float elapsedTime;
     private bool hasRotate = false;
 
 
@@ -109,11 +109,11 @@ public class EnemyWanderState : BaseEnemyState
 
     private void RotateOverTime(Transform currentEnemy)
     {
-        if (elapsedTime < rotationTimeMax)
+        if (rotationTime < rotationTimeMax)
         {
-            currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsedTime / rotationTimeMax);
+            currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, rotationTime / rotationTimeMax);
 
-            elapsedTime += Time.deltaTime;
+            rotationTime += Time.deltaTime;
 
             //Debug.Log("Enemy rotation: " + currentEnemy.rotation);
         }
@@ -122,7 +122,7 @@ public class EnemyWanderState : BaseEnemyState
             //Ensure the object reaches the exact target rotation at the end
             currentEnemy.rotation = targetRotation;
 
-            //Reset for potential future rotations
+            //Prevent next rotation
             hasRotate = true;
         }
     }
@@ -132,6 +132,6 @@ public class EnemyWanderState : BaseEnemyState
         wanderTime = 0;
         //isRotating = false;
         hasRotate = false;
-        elapsedTime = 0;
+        rotationTime = 0;
     }
 }

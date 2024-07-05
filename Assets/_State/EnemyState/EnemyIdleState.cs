@@ -27,16 +27,6 @@ public class EnemyIdleState : BaseEnemyState
         CaculateRotationTarget(stateManager);
     }
 
-    private void CaculateRotationTarget(EnemyStateManager stateManager)
-    {
-        currentEnemy = stateManager.currentHumanoidTransform;
-        initialRotation = currentEnemy.rotation;
-        // Generate a random angle within the range
-        float randomAngle = Random.Range(-120f, -240f);
-        // Calculate target rotation
-        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0);
-    }
-
     public override void OnStageExit(EnemyStateManager stateManager)
     {
     }
@@ -75,10 +65,31 @@ public class EnemyIdleState : BaseEnemyState
         }
         else
         {
+            int random = Random.Range(0, 100);
             this.ResetVariable();
-            stateManager.SwitchState(stateManager.wanderState);
-            return;
+            if (random < 40)
+            {
+                //To wander stage 
+                stateManager.SwitchState(stateManager.wanderState);
+                return;
+            }
+            else
+            {
+                //To chase stage
+                stateManager.SwitchState(stateManager.chaseState);
+                return;
+            }
         }
+    }
+
+    private void CaculateRotationTarget(EnemyStateManager stateManager)
+    {
+        currentEnemy = stateManager.currentHumanoidTransform;
+        initialRotation = currentEnemy.rotation;
+        // Generate a random angle within the range
+        float randomAngle = Random.Range(-120f, -240f);
+        // Calculate target rotation
+        targetRotation = initialRotation * Quaternion.Euler(0, randomAngle, 0);
     }
 
     private void TurnEnemyAround(EnemyStateManager stateManager)
@@ -93,7 +104,9 @@ public class EnemyIdleState : BaseEnemyState
         {
             //Ensure the object reaches the exact target rotation at the end
             currentEnemy.rotation = targetRotation;
+            //Prevent next rotation
             hasTurnAround = true;
+            //Set wallAhead to false
             stateManager.isWallAhead = false;
         }
     }

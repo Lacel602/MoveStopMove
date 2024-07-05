@@ -97,7 +97,7 @@ public class PlayerStateManager : BaseStateManager
     private void Start()
     {
         EnableJoyStick();
-
+        base.ResetVariable();
         //Player start on idle
         currentState = idleState;
         currentState.OnStageEnter(this);

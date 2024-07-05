@@ -1,11 +1,16 @@
 using UnityEngine;
 using Assets.Script;
 using Assets;
+using System;
 
 public class EnemyStateManager : BaseStateManager
 {
     [Header("Component")]
+    [SerializeField]
     public LayerMask wallLayer;
+
+    [SerializeField]
+    private SkinnedMeshRenderer skinMeshRenderer;
 
     [Header("AttackParameter")]
 
@@ -28,6 +33,7 @@ public class EnemyStateManager : BaseStateManager
     public EnemyWanderState wanderState = new EnemyWanderState();
     public EnemyDeathState deathState = new EnemyDeathState();
     public EnemyAttackState attackState = new EnemyAttackState();
+    public EnemyChaseState chaseState = new EnemyChaseState();
     #endregion
 
     public void Reset()
@@ -37,10 +43,12 @@ public class EnemyStateManager : BaseStateManager
 
     private void Start()
     {
+        //Random player color
+        this.RandomPlayerColor();
+
         //Enemy start on idle
         currentState = wanderState;
         currentState.OnStageEnter(this);
-
         //Debug.Log("Enemy is in " + currentState);
     }
     private void Update()
@@ -54,6 +62,18 @@ public class EnemyStateManager : BaseStateManager
         animator = this.transform.parent.Find("GFX").GetComponent<Animator>();
         attackable = this.transform.Find("AttackRange").GetComponent<Attackable>();
         currentWeaponScript = FindChildByName(this.transform.parent, "PlayerWeapons").GetChild(0).GetComponent<Weapon>();
+        skinMeshRenderer = this.transform.parent.Find("GFX/initialShadingGroup1").GetComponent<SkinnedMeshRenderer>();
+    }
+
+    private void RandomPlayerColor()
+    {
+        Debug.Log("Random Player Color");
+        Color newColor = skinMeshRenderer.sharedMaterial.color;
+        //newColor.r = UnityEngine.Random.Range(0, 256);
+        //newColor.g = UnityEngine.Random.Range(0, 256);
+        //newColor.b = UnityEngine.Random.Range(0, 256);
+        //newColor.a = 0.2f;
+        skinMeshRenderer.sharedMaterial.color = newColor;
     }
 
     public void SwitchState(BaseEnemyState newState)

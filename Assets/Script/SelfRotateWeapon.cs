@@ -3,7 +3,7 @@ using Assets.Script;
 using System;
 using UnityEngine;
 
-public class RotateWeapon : Weapon
+public class SelfRotateWeapon : Weapon
 {
     private bool isRotate = false;
 
@@ -13,7 +13,7 @@ public class RotateWeapon : Weapon
     }
     private void Update()
     {
-        RotateAndThrowWeapon();
+        ThrowWeapon();
     }
 
     private void LoadComponent()
@@ -40,7 +40,7 @@ public class RotateWeapon : Weapon
         return result.gameObject;
     }
 
-    private void RotateAndThrowWeapon()
+    private void ThrowWeapon()
     {
         //Debug.Log(isThrowing);
 
@@ -53,7 +53,16 @@ public class RotateWeapon : Weapon
                 this.transform.rotation = Quaternion.Euler(new Vector3(-90, 10, 0));
                 isRotate = true;
             }
-            this.ThrowWeapon(enemyPos);
+            this.MoveWeapon(enemyPos);
+
+            //Rotate weapon
+            SelfRotation();
+
+            //ResetWeapon when out of range
+            CaculateRangeToReset();
+
+            //Reset weapon when out of time
+            CountDownToReset();
         }
     }
 
@@ -66,7 +75,7 @@ public class RotateWeapon : Weapon
         }
     }
 
-    public override void ThrowWeapon(Vector3 enemyPos)
+    public override void MoveWeapon(Vector3 enemyPos)
     {
         //Set weapon parent outside player
         this.transform.parent = projectileContainer;
@@ -74,18 +83,15 @@ public class RotateWeapon : Weapon
         //Get throwing destination
         Vector3 destination = new Vector3(enemyPos.x, transform.position.y, enemyPos.z);
 
-        //Move by move toward
-        //this.transform.position = Vector3.MoveTowards(this.transform.position, destination, projectileSpeed * Time.deltaTime);
-
         //Move by translate
         Vector3 target = destination - startWeaponWorldPos;
+        target.y = -7f;
+        this .transform.position = new Vector3(transform.position.x, -7f, transform.position.y);
         this.transform.Translate(target.normalized * projectileSpeed * Time.deltaTime, Space.World);
+    }
 
-        //Rotate weapon
-        SelfRotation();
-
-        //Reset weapon when out of range
-        CountDownToReset();
+    private void CaculateRangeToReset()
+    {
     }
 
     private void CountDownToReset()
@@ -111,7 +117,7 @@ public class RotateWeapon : Weapon
     private void SelfRotation()
     {
         Vector3 rotationThisFrame = new Vector3(0, 0, -1);
-        transform.Rotate(rotationThisFrame, 5f);
+        this.transform.Rotate(rotationThisFrame, 5f);
     }
 
     private void OnTriggerEnter(Collider other)
