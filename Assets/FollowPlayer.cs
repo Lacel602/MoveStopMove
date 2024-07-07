@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FollowPlayer : MonoBehaviour
@@ -5,7 +6,7 @@ public class FollowPlayer : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
-    [SerializeField] 
+    [SerializeField]
     private Vector3 distance;
 
     [SerializeField]
@@ -25,6 +26,11 @@ public class FollowPlayer : MonoBehaviour
 
     private void Start()
     {
+        GetPlayerDistance();
+    }
+
+    private void GetPlayerDistance()
+    {
         distance = this.transform.position - player.transform.position;
     }
 
@@ -35,19 +41,31 @@ public class FollowPlayer : MonoBehaviour
         {
             //Debug.Log("ray cast hit something");
             Obstacle obstacle = hit.collider.gameObject.GetComponent<Obstacle>();
-            obstacle.IsOverCastPlayer = true;
-            oldObstacle = obstacle;
-        } 
+            if (!obstacle.IsOverCastPlayer)
+            {
+                obstacle.IsOverCastPlayer = true;
+                oldObstacle = obstacle;
+            }    
+        }
         else
         {
             //Debug.Log("ray cast hit nothing");
             if (oldObstacle != null)
             {
-                oldObstacle.IsOverCastPlayer = false;
+                if (oldObstacle.IsOverCastPlayer)
+                {
+                    oldObstacle.IsOverCastPlayer = false;
+                }  
             }
         }
     }
     private void LateUpdate()
+    {
+        //Make camera follow player
+        MoveCamera();
+    }
+
+    private void MoveCamera()
     {
         this.transform.position = player.transform.position + distance;
     }

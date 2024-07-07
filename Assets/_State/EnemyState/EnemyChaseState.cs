@@ -17,14 +17,18 @@ public class EnemyChaseState : BaseEnemyState
     public override void OnStageEnter(EnemyStateManager stateManager)
     {
         stateManager.DisableAllAnimations();
-        Debug.Log("Enemy start chase state");
+        //Debug.Log("Enemy start chase state");
+
         //Get a nearest enemy
         nearestEnemy = EnemySpawnManager.Instance.GetNearestEnemyActive(stateManager.currentHumanoidTransform.gameObject);
+
         //Lock enemy and chase for an amount of time
         chaseTimeMax = Random.Range(2f ,4f);
 
+        //Get the initial rotation
         initialRotation = stateManager.currentHumanoidTransform.rotation;
 
+        //Get target rotation
         targetRotation = GetTargetRotateDirection(stateManager, nearestEnemy);
     }
 
@@ -107,7 +111,7 @@ public class EnemyChaseState : BaseEnemyState
             currentEnemy.rotation = Quaternion.Slerp(initialRotation, targetRotation, rotationTime / rotationTimeMax);
             rotationTime += Time.deltaTime;
 
-            //Debug.Log("Enemy rotation: " + currentEnemy.rotation);
+            //----Debug.Log("Enemy rotation: " + currentEnemy.rotation);
         }
         else
         {
@@ -130,7 +134,8 @@ public class EnemyChaseState : BaseEnemyState
     {
         // Get the direction vector from this gameobject to the nearest enemy
         Vector3 directionToEnemy = nearestEnemy.transform.position - stateManager.currentHumanoidTransform.position;
-        Debug.Log("Direction to enemy" + directionToEnemy);
+        //Debug.Log("Direction to enemy" + directionToEnemy);
+
         // Caculate the target rotation
         Quaternion target = Quaternion.LookRotation(directionToEnemy);
 

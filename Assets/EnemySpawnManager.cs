@@ -50,6 +50,11 @@ public class EnemySpawnManager : MonoBehaviour
     {
         //Spawn enemy if there are no enemy in map
         SpawnEnemyToMap();
+        SetEnemyLeftTextUI();
+    }
+
+    private void SetEnemyLeftTextUI()
+    {
         enemyLeftText.text = enemyTotal.ToString();
     }
 

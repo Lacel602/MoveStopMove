@@ -11,7 +11,7 @@ public class EnemyAttackState : BaseEnemyState
     private Vector3 enemyPos = Vector3.zero;
     public override void OnStageEnter(EnemyStateManager stateManager)
     {
-        Debug.Log("Enemy Attack!");
+        //-----Debug.Log("Enemy Attack!");
         stateManager.DisableAllAnimations();
 
         if (!stateManager.hasAttacked)

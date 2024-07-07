@@ -49,7 +49,6 @@ public class Attackable : MonoBehaviour
     private void FixedUpdate()
     {
         enemy = FindEnemies(this.transform.position, radius);
-
         TransformTargetCircle();
     }
 

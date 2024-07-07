@@ -46,7 +46,7 @@ public class EnemyStateManager : BaseStateManager
         //Random player color
         this.RandomPlayerColor();
 
-        //Enemy start on idle
+        //Enemy start on wander
         currentState = wanderState;
         currentState.OnStageEnter(this);
         //Debug.Log("Enemy is in " + currentState);
@@ -84,10 +84,5 @@ public class EnemyStateManager : BaseStateManager
         //Debug.Log("Switch state");
         //Debug.Log("Enemy is in " + currentState);
         newState.OnStageEnter(this);
-    }
-
-    private void OnDrawGizmos()
-    {
-        
     }
 }

@@ -1,18 +1,12 @@
+using Assets.Script;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StraightWeapon : MonoBehaviour
+public class StraightWeapon : Weapon
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void MoveWeapon(Vector3 enemyPos)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        throw new System.NotImplementedException();
     }
 }

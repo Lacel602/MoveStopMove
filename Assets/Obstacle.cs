@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Obstacle : MonoBehaviour
 {
@@ -9,12 +10,9 @@ public class Obstacle : MonoBehaviour
     [SerializeField]
     private MeshRenderer obstacleRender;
     [SerializeField]
-    private Color originColor;
-
-    private Color transparentColor;
-
+    private Material originalMaterial;
     [SerializeField]
-    public bool TransparentOn = false;
+    private Material transparentMaterial;
 
     public bool IsOverCastPlayer
     {
@@ -25,91 +23,134 @@ public class Obstacle : MonoBehaviour
         set
         {
             isOverCastPlayer = value;
-            ChangeMaterialTransParent(isOverCastPlayer);
+            ChangeMaterial(isOverCastPlayer);
         }
-    }
-
-    private void Update()
-    {
-        //IsOverCastPlayer = TransparentOn;
     }
     private void Reset()
     {
         this.LoadComponent();
     }
 
-    private void Start()
-    {
-        transparentColor = GetTransparentColor(originColor);
-    }
-
     private void LoadComponent()
     {
         obstacleRender = this.GetComponent<MeshRenderer>();
-        originColor = obstacleRender.sharedMaterial.color;
+        originalMaterial = obstacleRender.sharedMaterial;
+        //Get value of transparent material
+        transparentMaterial = GetTransparentMaterial();
+
+        //Debug.Log("Blend Mode: " + GetBlendMode(transparentMaterial));
+        //Debug.Log("Color a = " + transparentMaterial.color.a);
     }
 
-    private Color GetTransparentColor(Color color)
+    private Material GetTransparentMaterial()
     {
-        Color newColor = color;
-        newColor.a = 0.2f;
-        return newColor;
+        //Create new material
+        Material newMaterial = new Material(originalMaterial);
+
+        //Create trasnparent color
+        Color newColor = newMaterial.color;
+        newColor.a = 0.1f;
+        newMaterial.color = newColor;
+
+        //Change render mode of material
+        SetRenderMode(BlendMode.Transparent, newMaterial);
+
+        //Debug.Log("Blend Mode: " + GetBlendMode(newMaterial));
+
+        return newMaterial;
     }
 
-    private void ChangeMaterialTransParent(bool overcast)
+    private void ChangeMaterial(bool isOvercasting)
     {
-        if (overcast)
+        if (isOvercasting)
         {
-            SetRenderMode(BlendMode.Transparent);
-            obstacleRender.sharedMaterial.color = transparentColor;
+            //To transparent
+            Debug.Log("Set material to transparent");
+            
+            obstacleRender.material = transparentMaterial;
+            SetRenderMode(BlendMode.Transparent, obstacleRender.material);
+
+            //Debug.Log("Blend Mode: " + GetBlendMode(obstacleRender.material));
+            //Debug.Log("Color a = " + obstacleRender.material.color.a);
         }
         else
         {
-            SetRenderMode(BlendMode.Opaque);
-            obstacleRender.sharedMaterial.color = originColor;
+            //To original
+            obstacleRender.material = originalMaterial;
+            SetRenderMode(BlendMode.Opaque, obstacleRender.material);
         }
     }
 
-    public void SetRenderMode(BlendMode blendMode)
+    public void SetRenderMode(BlendMode blendMode, Material material)
     {
         switch (blendMode)
         {
             case BlendMode.Opaque:
-                obstacleRender.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                obstacleRender.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                obstacleRender.sharedMaterial.SetInt("_ZWrite", 1);
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                obstacleRender.sharedMaterial.renderQueue = -1;
+                material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                material.SetInt("_ZWrite", 1);
+                material.DisableKeyword("_ALPHATEST_ON");
+                material.DisableKeyword("_ALPHABLEND_ON");
+                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Geometry;
                 break;
             case BlendMode.Cutout:
-                obstacleRender.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                obstacleRender.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                obstacleRender.sharedMaterial.SetInt("_ZWrite", 1);
-                obstacleRender.sharedMaterial.EnableKeyword("_ALPHATEST_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                obstacleRender.sharedMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                material.SetInt("_ZWrite", 1);
+                material.EnableKeyword("_ALPHATEST_ON");
+                material.DisableKeyword("_ALPHABLEND_ON");
+                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
                 break;
             case BlendMode.Fade:
-                obstacleRender.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                obstacleRender.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                obstacleRender.sharedMaterial.SetInt("_ZWrite", 0);
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-                obstacleRender.sharedMaterial.EnableKeyword("_ALPHABLEND_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-                obstacleRender.sharedMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                material.SetInt("_ZWrite", 0);
+                material.DisableKeyword("_ALPHATEST_ON");
+                material.EnableKeyword("_ALPHABLEND_ON");
+                material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 break;
             case BlendMode.Transparent:
-                obstacleRender.sharedMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                obstacleRender.sharedMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                obstacleRender.sharedMaterial.SetInt("_ZWrite", 0);
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHATEST_ON");
-                obstacleRender.sharedMaterial.DisableKeyword("_ALPHABLEND_ON");
-                obstacleRender.sharedMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-                obstacleRender.sharedMaterial.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+                material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                material.SetInt("_ZWrite", 0);
+                material.DisableKeyword("_ALPHATEST_ON");
+                material.EnableKeyword("_ALPHABLEND_ON");
+                material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
                 break;
         }
+    }
+
+    public BlendMode GetBlendMode(Material material)
+    {
+        int srcBlend = material.GetInt("_SrcBlend");
+        int dstBlend = material.GetInt("_DstBlend");
+        int zWrite = material.GetInt("_ZWrite");
+
+        if (srcBlend == (int)UnityEngine.Rendering.BlendMode.One && dstBlend == (int)UnityEngine.Rendering.BlendMode.Zero)
+        {
+            if (zWrite == 1)
+                return BlendMode.Opaque;
+        }
+        else if (srcBlend == (int)UnityEngine.Rendering.BlendMode.One && dstBlend == (int)UnityEngine.Rendering.BlendMode.Zero)
+        {
+            if (zWrite == 1)
+                return BlendMode.Cutout;
+        }
+        else if (srcBlend == (int)UnityEngine.Rendering.BlendMode.SrcAlpha && dstBlend == (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha)
+        {
+            if (zWrite == 0)
+                return BlendMode.Fade;
+        }
+        else if (srcBlend == (int)UnityEngine.Rendering.BlendMode.One && dstBlend == (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha)
+        {
+            if (zWrite == 0)
+                return BlendMode.Transparent;
+        }
+
+        return BlendMode.Fade;
     }
 }
