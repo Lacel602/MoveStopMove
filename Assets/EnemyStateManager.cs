@@ -22,7 +22,7 @@ public class EnemyStateManager : BaseStateManager
 
     public Vector2 wanderTime = new Vector2(2f, 4f);
 
-    public bool isWallAhead;
+    public bool isWallAhead = false;
 
     [SerializeField]
     public float moveSpeed = 2f;

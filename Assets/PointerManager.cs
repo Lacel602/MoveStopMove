@@ -11,6 +11,8 @@ public class PointerManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> enemies = new List<GameObject>();
 
+    
+
     private void Reset()
     {
         this.LoadComponent();

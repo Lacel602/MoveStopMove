@@ -135,7 +135,7 @@ public class EnemySpawnManager : MonoBehaviour
         //Player win when enemy left = 0;
         if (enemyleft == 0)
         {
-            player.GetComponent<PlayerStateManager>().isWin = true;
+            player.GetComponentInChildren<PlayerStateManager>().isWin = true;
             return;
         }
 
@@ -179,7 +179,7 @@ public class EnemySpawnManager : MonoBehaviour
         }
     }
 
-    public GameObject GetNearestEnemyActive(Vector3 point)
+    public GameObject GetNearestEnemyActive(GameObject current)
     {
         GameObject nearestEnemy = null;
         float minDistance = float.MaxValue;
@@ -192,11 +192,14 @@ public class EnemySpawnManager : MonoBehaviour
         {
             foreach (var enemy in allEnemyList)
             {
-                float distance = Vector3.Distance(point, enemy.transform.position);
-                if (distance < minDistance)
+                if (enemy != current && enemy.activeSelf)
                 {
-                    minDistance = distance;
-                    nearestEnemy = enemy;
+                    float distance = Vector3.Distance(current.transform.position, enemy.transform.position);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        nearestEnemy = enemy;
+                    }
                 }
             }
         }

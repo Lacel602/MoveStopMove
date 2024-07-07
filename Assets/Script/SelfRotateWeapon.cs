@@ -86,7 +86,7 @@ public class SelfRotateWeapon : Weapon
         //Move by translate
         Vector3 target = destination - startWeaponWorldPos;
         target.y = -7f;
-        this .transform.position = new Vector3(transform.position.x, -7f, transform.position.y);
+        this .transform.position = new Vector3(transform.position.x, -7f, transform.position.z);
         this.transform.Translate(target.normalized * projectileSpeed * Time.deltaTime, Space.World);
     }
 

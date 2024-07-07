@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemyPointer : MonoBehaviour
 {
@@ -10,24 +11,33 @@ public class EnemyPointer : MonoBehaviour
     private Transform player;
     [SerializeField]
     private GameObject arrow;
+    [SerializeField]
+    private Color enemyColor;
 
     private void Reset()
     {
         this.LoadComponent();
     }
 
-    private void LoadComponent()
+    private void Start()
     {
-        target = GameObject.Find("ActiveEnemy").transform.GetChild(0).gameObject;
-        arrow = this.transform.Find("Arrow").gameObject;
-        pointerRectTransform = arrow.GetComponent<RectTransform>();
-        player = GameObject.Find("Player").transform;
+        enemyColor = target.transform.Find("GFX/initialShadingGroup1").GetComponent<SkinnedMeshRenderer>().material.color;
+        arrow.GetComponent<Image>().color = enemyColor;
     }
 
     private void Update()
     {
         MoveAndRotateIndicator();
     }
+
+    private void LoadComponent()
+    {
+        //target = GameObject.Find("ActiveEnemy").transform.GetChild(0).gameObject;
+        arrow = this.transform.Find("Arrow").gameObject;
+        pointerRectTransform = arrow.GetComponent<RectTransform>();
+        player = GameObject.Find("Player").transform;
+    }
+
 
     private void MoveAndRotateIndicator()
     {

@@ -67,10 +67,10 @@ public class EnemyIdleState : BaseEnemyState
         {
             int random = Random.Range(0, 100);
             this.ResetVariable();
-            if (random < 40)
+            if (random <= 35)
             {
                 //To wander stage 
-                stateManager.SwitchState(stateManager.wanderState);
+                stateManager.SwitchState(stateManager.chaseState);
                 return;
             }
             else

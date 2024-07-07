@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ConstantStat : MonoBehaviour
@@ -19,5 +20,9 @@ public class ConstantStat : MonoBehaviour
     //}
     #endregion
 
+    [SerializeField]
     public static float increaseSize { get; private set; } = 1.1f;
+
+    [SerializeField]
+    public List<Material> enemyMaterialList = new List<Material>();
 }
