@@ -20,6 +20,7 @@ public class EnemyAttackState : BaseEnemyState
             stateManager.animator.SetBool(AnimationStrings.isAttack, true);
 
             //Need fixed for enemy
+
             //Set has attacked to true
             stateManager.hasAttacked = !stateManager.hasAttacked;
         }
@@ -74,7 +75,7 @@ public class EnemyAttackState : BaseEnemyState
             if (eslapsedFinishTime >= stateManager.attackDelayMax)
             {
                 ResetVariable();
-                stateManager.SwitchState(stateManager.wanderState);
+                stateManager.SwitchState(stateManager.idleState);
                 return;
             }
             else

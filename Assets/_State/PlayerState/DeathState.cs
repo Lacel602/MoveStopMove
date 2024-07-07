@@ -16,6 +16,8 @@ namespace Assets._State
             stateManager.attackable.groundCircle.SetActive(false);
 
             stateManager.currentCollider.enabled = false;
+
+            stateManager.gameOverUI.SetActive(true);
         }
 
         public override void OnStageExit(PlayerStateManager stateManager)

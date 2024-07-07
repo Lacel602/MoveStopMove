@@ -45,7 +45,7 @@ public class PlayerStateManager : BaseStateManager
 
     public bool isDance = false;
 
-
+    public GameObject gameOverUI;
 
     #region StateMachine
     public BaseState currentState;
@@ -91,6 +91,7 @@ public class PlayerStateManager : BaseStateManager
         variableJoystick = GameObject.Find("Variable Joystick").GetComponent<VariableJoystick>();
         characterController = this.transform.parent.GetComponent<CharacterController>();
         weaponList = FindChildByName(this.transform.parent, "PlayerWeapons").gameObject;
+        gameOverUI = GameObject.Find("GameOverMenu");
     }
     #endregion
 

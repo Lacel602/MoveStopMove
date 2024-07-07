@@ -25,16 +25,20 @@ public class Statistic : MonoBehaviour
         scroreTMP = this.transform.Find("Canvas").GetComponentInChildren<TMP_Text>();
     }
 
-    public void OnKillEnemy()
+    public void OnKillEnemy(Statistic enemyStat)
     {
         //Increased score and level
         score++;
-        level++;
 
-        //Reset size of player
-        this.transform.localScale *= ConstantStat.increaseSize;
+        if (enemyStat.level >= level)
+        {
+            level++;
+
+            //Increase size of player
+            this.transform.localScale *= ConstantStat.increaseSize;
+        } 
 
         //Change TMP score text
-        scroreTMP.text = score.ToString();
+        scroreTMP.text = level.ToString();
     }
 }

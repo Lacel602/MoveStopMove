@@ -122,6 +122,11 @@ public class SelfRotateWeapon : Weapon
 
     private void OnTriggerEnter(Collider other)
     {
+        CheckCollide(other);
+    }
+
+    private void CheckCollide(Collider other)
+    {
         if (isThrowing)
         {
             if (CheckCollideTag(other))
@@ -132,7 +137,7 @@ public class SelfRotateWeapon : Weapon
 
                 //Increased size of current game object
 
-                stat.OnKillEnemy();
+                stat.OnKillEnemy(enemyStat);
                 //Set alive of hit gameObject to false
                 enemyStateManager.isAlive = false;
 

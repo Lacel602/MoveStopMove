@@ -71,8 +71,14 @@ public class EnemySpawnManager : MonoBehaviour
             while (deactiveEnemyList.Count > 0)
             {
                 Statistic enemyStat = deactiveEnemyList[0].GetComponent<Statistic>();
-                enemyStat.level = (int)Random.Range(1, 3);
+                //Set enemy to new level
+                int newLevel = Random.Range(0, 3);
+                enemyStat.level = newLevel;
+                deactiveEnemyList[0].GetComponent<EnemyController>().scoreText.text = enemyStat.level.ToString();
+                //Change size based on level
+                deactiveEnemyList[0].transform.localScale *= Mathf.Pow(ConstantStat.increaseSize, newLevel);
                 enemyStat.score = enemyStat.level;
+                //Spawn enemy
                 SpawnEnemy(deactiveEnemyList[0]);
             }
         }
@@ -156,7 +162,12 @@ public class EnemySpawnManager : MonoBehaviour
             {
                 //Set enemy level to axpproximate player level
                 int level = Mathf.Clamp(enemyStat.level + Random.Range(-1, 3), 0, 20);
+
+                enemy.transform.localScale *= Mathf.Pow(ConstantStat.increaseSize, (level - enemyStat.level));
                 enemyStat.level = level;
+
+                enemy.GetComponent<EnemyController>().scoreText.text = enemyStat.level.ToString();
+
                 enemyStat.score = enemyStat.level;
 
 
