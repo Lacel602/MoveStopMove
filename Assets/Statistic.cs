@@ -17,7 +17,10 @@ public class Statistic : MonoBehaviour
     private TMP_Text scroreTMP;
 
     [SerializeField]
-    private CameraManager cameraCtl;
+    private CameraManager cameraManager;
+
+    [SerializeField]
+    private HumanoidManager humanoidManager;
 
     private void Reset()
     {
@@ -27,7 +30,8 @@ public class Statistic : MonoBehaviour
     private void LoadComponent()
     {
         scroreTMP = this.transform.Find("Canvas").GetComponentInChildren<TMP_Text>();
-        cameraCtl = GameObject.Find("MainCamera").GetComponent<CameraManager>();
+        cameraManager = GameObject.Find("MainCamera").GetComponent<CameraManager>();
+        humanoidManager = this.GetComponent<HumanoidManager>();
     }
 
     public void OnKillEnemy(Statistic enemyStat)
@@ -35,21 +39,26 @@ public class Statistic : MonoBehaviour
         //Increased score and level
         score++;
 
+        //Play death efx
+        enemyStat.humanoidManager.effectManager.deathEfx.Play();
+
         if (enemyStat.level >= level)
         {
             level++;
+            //Play level up Efx
+            humanoidManager.effectManager.levelUpEfx.Play();
 
             //Increase size of player
-
             Vector3 newScale = this.transform.localScale * ConstantStat.increaseSize;
             StartCoroutine(ChangeVectorOverTime(this.transform.localScale, newScale, 0.2f));
-            
 
+
+            //Backward camera if player level up
             if (this.CompareTag("Player"))
             {
-                cameraCtl.BackwardCamera(level);
+                cameraManager.BackwardCamera(level);
             }
-        } 
+        }
 
         //Change TMP score text
         scroreTMP.text = level.ToString();

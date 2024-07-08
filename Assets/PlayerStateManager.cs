@@ -92,6 +92,7 @@ public class PlayerStateManager : BaseStateManager
         characterController = this.transform.parent.GetComponent<CharacterController>();
         weaponList = FindChildByName(this.transform.parent, "PlayerWeapons").gameObject;
         gameOverUI = GameObject.Find("GameOverMenu");
+        humanoidManager = this.transform.parent.GetComponent<PlayerManager>();
     }
     #endregion
 

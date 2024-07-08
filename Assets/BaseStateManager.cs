@@ -31,6 +31,8 @@ namespace Assets
 
         public Statistic currentStatistic;
 
+        public HumanoidManager humanoidManager;
+
         protected virtual void LoadComponent()
         {
             currentHumanoidTransform = this.transform.parent;
