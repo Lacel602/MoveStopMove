@@ -366,6 +366,7 @@ MonoBehaviour:
   score: 0
   level: 0
   scroreTMP: {fileID: 3450914992302446438}
+  cameraCtl: {fileID: 0}
 --- !u!1 &3057537900332910087
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.41320753, g: 0.94542664, b: 1, a: 0.61960787}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -709,8 +710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39aca82505cc63d4b9ce792893790fa2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 217.02539, g: 150.01425, b: 8.000397, a: 0.2}
-  scoreImage: {fileID: 6947115527890760903}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  scoreBackground: {fileID: 6947115527890760903}
 --- !u!1 &6310092972631357229
 GameObject:
   m_ObjectHideFlags: 0
