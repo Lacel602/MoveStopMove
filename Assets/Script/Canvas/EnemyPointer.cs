@@ -1,4 +1,7 @@
+using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class EnemyPointer : MonoBehaviour
@@ -13,7 +16,12 @@ public class EnemyPointer : MonoBehaviour
     private GameObject arrow;
     [SerializeField]
     private Color enemyColor;
-
+    [SerializeField]
+    private GameObject score;
+    [SerializeField]
+    private TMP_Text scoreText;
+    [SerializeField]
+    private Statistic stat;
     private void Reset()
     {
         this.LoadComponent();
@@ -22,12 +30,20 @@ public class EnemyPointer : MonoBehaviour
     private void Start()
     {
         enemyColor = target.transform.Find("GFX/initialShadingGroup1").GetComponent<SkinnedMeshRenderer>().material.color;
-        arrow.GetComponent<Image>().color = enemyColor;
+        arrow.transform.Find("Image").GetComponent<Image>().color = enemyColor;
+        score.GetComponent<Image>().color = enemyColor;
+        stat = target.GetComponent<Statistic>();
     }
 
     private void Update()
     {
         MoveAndRotateIndicator();
+        SetScoreText();
+    }
+
+    private void SetScoreText()
+    {
+        scoreText.text = stat.level.ToString();
     }
 
     private void LoadComponent()
@@ -36,6 +52,8 @@ public class EnemyPointer : MonoBehaviour
         arrow = this.transform.Find("Arrow").gameObject;
         pointerRectTransform = arrow.GetComponent<RectTransform>();
         player = GameObject.Find("Player").transform;
+        score = this.transform.Find("Score").gameObject;
+        scoreText = score.GetComponentInChildren<TMP_Text>();
     }
 
 
@@ -48,14 +66,16 @@ public class EnemyPointer : MonoBehaviour
         if (isOffScreen && target.activeSelf)
         {
             arrow.gameObject.SetActive(true);
+            score.gameObject.SetActive(true);
 
-            //Move arrow
+            //Move arrow and score
             Vector3 cappedScreenPos = screenPos;
             cappedScreenPos.z = 0;
-            cappedScreenPos.x = Mathf.Clamp(cappedScreenPos.x, 20, Screen.width - 20);
-            cappedScreenPos.y = Mathf.Clamp(cappedScreenPos.y, 20, Screen.height - 20);
+            cappedScreenPos.x = Mathf.Clamp(cappedScreenPos.x, 60, Screen.width - 60);
+            cappedScreenPos.y = Mathf.Clamp(cappedScreenPos.y, 60, Screen.height - 60);
 
             arrow.transform.position = cappedScreenPos;
+            score.transform.position = cappedScreenPos;
 
             //Rotate arrow
             //Get center point of screen
@@ -70,6 +90,7 @@ public class EnemyPointer : MonoBehaviour
         else
         {
             arrow.gameObject.SetActive(false);
+            score.gameObject.SetActive(false);
         }
     }
 }
