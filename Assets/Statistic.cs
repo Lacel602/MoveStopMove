@@ -15,6 +15,9 @@ public class Statistic : MonoBehaviour
     [SerializeField]
     private TMP_Text scroreTMP;
 
+    [SerializeField]
+    private CameraController cameraCtl;
+
     private void Reset()
     {
         this.LoadComponent();
@@ -23,6 +26,7 @@ public class Statistic : MonoBehaviour
     private void LoadComponent()
     {
         scroreTMP = this.transform.Find("Canvas").GetComponentInChildren<TMP_Text>();
+        cameraCtl = GameObject.Find("MainCamera").GetComponent<CameraController>();
     }
 
     public void OnKillEnemy(Statistic enemyStat)
@@ -36,6 +40,11 @@ public class Statistic : MonoBehaviour
 
             //Increase size of player
             this.transform.localScale *= ConstantStat.increaseSize;
+
+            if (this.CompareTag("Player"))
+            {
+                cameraCtl.BackwardCamera(level);
+            }
         } 
 
         //Change TMP score text
