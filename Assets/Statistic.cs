@@ -17,7 +17,7 @@ public class Statistic : MonoBehaviour
     private TMP_Text scroreTMP;
 
     [SerializeField]
-    private CameraController cameraCtl;
+    private CameraManager cameraCtl;
 
     private void Reset()
     {
@@ -27,7 +27,7 @@ public class Statistic : MonoBehaviour
     private void LoadComponent()
     {
         scroreTMP = this.transform.Find("Canvas").GetComponentInChildren<TMP_Text>();
-        cameraCtl = GameObject.Find("MainCamera").GetComponent<CameraController>();
+        cameraCtl = GameObject.Find("MainCamera").GetComponent<CameraManager>();
     }
 
     public void OnKillEnemy(Statistic enemyStat)
@@ -64,8 +64,7 @@ public class Statistic : MonoBehaviour
             // Interpolate between the two vectors
             Vector3 currentVector = Vector3.Lerp(start, destination, elapsedTime / t);
 
-            // Update the value of the vector (this could be a position, a direction, etc.)
-            // For example, if you want to change the position of the GameObject:
+            // Update the value of the localScale
             this.transform.localScale = currentVector;
 
             // Increment the elapsed time

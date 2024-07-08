@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class CameraManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject player;
@@ -97,8 +97,7 @@ public class CameraController : MonoBehaviour
             // Interpolate between the two vectors
             Vector3 currentVector = Vector3.Lerp(start, destination, elapsedTime / t);
 
-            // Update the value of the vector (this could be a position, a direction, etc.)
-            // For example, if you want to change the position of the GameObject:
+            // Update the value of the distance
             distance = currentVector;
 
             // Increment the elapsed time
